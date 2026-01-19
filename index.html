@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mundo Mascota - Tienda Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="plantilla/css/styles.css">
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+
+<div id="app">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html" id="logo">MundoMascota</a>
+            
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html" id="btn-inicio">Inicio</a>
+                    </li>
+                                        
+                    <li class="nav-item mi-dropdown-container">
+                        <a class="nav-link" href="#" id="link-productos">
+                            Productos <span style="font-size: 0.7em;">▼</span>
+                        </a>
+                        
+                        <ul id="lista-desplegable">
+                            <li><a class="item-categoria" href="#" data-id="1">Camas</a></li>
+                            <li><a class="item-categoria" href="#" data-id="2">Rascadores</a></li>
+                            <li><a class="item-categoria" href="#" data-id="3">Accesorios</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="btn-acerca">Acerca de</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-light me-2" id="btn-carrito">🛒</button>
+                    <button class="btn btn-outline-light me-2" id="btn-login">👤</button>
+                    <select id="selector-idioma" class="form-select form-select-sm" style="width: auto;">
+                        <option value="es">ES</option>
+                        <option value="en">EN</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="carousel-container">
+        <div class="carousel-track" :style="trackStyle">
+            <div class="slide" v-for="(img, index) in slides" :key="index">
+                <img :src="img" alt="Promoción">
+            </div>
+        </div>
+    </div>
+
+    <main id="main-content" class="container my-5">
+        <div class="text-center">
+            <h1>Bienvenidos a Mundo Mascota</h1>
+            <p class="lead">Cuidamos de tus compañeros de vida con los mejores artículos.</p>
+        </div>
+    </main>
+
+    <aside class="container border-top pt-4">
+        <h4>Productos Recomendados</h4>
+        <div id="recomendados-lista" class="row text-center py-3">
+            <p class="text-muted">Explora nuestras categorías para ver ofertas.</p>
+        </div>
+    </aside>
+
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p>&copy; 2024 Mundo Mascota S.L. | Calle Canina 123 | contacto@mascotas.es</p>
+    </footer>
+</div>
+
+<script src="plantilla/js/script.js"></script>
+</body>
+</html>
