@@ -9,6 +9,7 @@
 </head>
 <body>
 
+    <!-- Barra de navegación, header-->
 <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -49,13 +50,26 @@
         </div>
     </nav>
 
+    <!-- Carrusel de imágenes, comienzo del body-->
     <div class="carousel-container">
-        <div class="carousel-track" :style="trackStyle">
-            <div class="slide" v-for="(img, index) in slides" :key="index">
-                <img :src="img" alt="Promoción">
-            </div>
+        <div class="carousel-track">
+          <!-- Clon de la última 
+                     <div class="slide"><img src="img/cama1.jpg" alt=""></div>
+
+          -->
+      
+          <!-- Slides reales -->
+          <div class="slide"><img src="img/cama1.jpg" alt=""></div>
+          <div class="slide"><img src="https://www.cifpzonzamas.es/img/noticias/01KBJ3KFDMD1H2W51W4BBW738M.jpg" alt=""></div>
+          <div class="slide"><img src="https://www.cifpzonzamas.es/img/nuestro-centro/ateca.jpg" alt=""></div>
+          <div class="slide"><img src="https://www.cifpzonzamas.es/img/nuestro-centro/energia.jpg" alt=""></div>
+          <div class="slide"><img src="https://www.cifpzonzamas.es/img/noticias/01KES0E8GW2BXSPXYNCJTA683A.png" alt=""></div>
+      
+          <!-- Clon de la primera -->
+          <div class="slide"><img src="https://www.cifpzonzamas.es/img/noticias/01KC8ZJRF3Q9B790FD0JAN7CTV.png" alt=""></div>
         </div>
-    </div>
+      </div>
+      
 
     <main id="main-content" class="container my-5">
         <div class="text-center">
@@ -71,6 +85,7 @@
         </div>
     </aside>
 
+    <!-- Footer-->
     <footer class="bg-dark text-white text-center py-4 mt-5">
         <p>&copy; 2024 Mundo Mascota S.L. | Calle Canina 123 | contacto@mascotas.es</p>
     </footer>

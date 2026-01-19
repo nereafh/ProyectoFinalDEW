@@ -1,9 +1,10 @@
+/*
 const { createApp } = Vue;
 
 const app = createApp({
     data() {
         return {
-            slides: ['img/promo1.jpg', 'img/promo2.jpg', 'img/promo3.jpg'],
+            slides: ['img/cama1.jpg', 'img/promo2.jpg', 'img/promo3.jpg'],
             index: 0,
             transition: 'transform 0.5s ease'
         }
@@ -20,6 +21,30 @@ const app = createApp({
     }
 });
 app.mount('#app');
+
+*/
+
+// --- LÓGICA DEL CARRUSEL (JS PURO) ---
+let currentIndex = 0;
+function moverCarrusel() {
+    const track = document.querySelector('.carousel-track');
+    const slides = document.querySelectorAll('.slide');
+    
+    if (!track || slides.length === 0) return;
+
+    currentIndex++;
+
+    // Si llegamos al final, volvemos al principio
+    if (currentIndex >= slides.length) {
+        currentIndex = 0;
+    }
+
+    const desplazamiento = currentIndex * -100;
+    track.style.transform = `translateX(${desplazamiento}%)`;
+}
+
+// Iniciar el movimiento automático cada 3 segundos
+setInterval(moverCarrusel, 2000);
 
 
 
