@@ -1,56 +1,44 @@
-/*
-const { createApp } = Vue;
+    const fotos = document.querySelectorAll('.slide');
+    let indice = 0; //contador de la foto actual
 
-const app = createApp({
-    data() {
-        return {
-            slides: ['img/cama1.jpg', 'img/promo2.jpg', 'img/promo3.jpg'],
-            index: 0,
-            transition: 'transform 0.5s ease'
-        }
-    },
-    computed: {
-        trackStyle() {
-            return { transform: `translateX(-${this.index * 100}%)`, transition: this.transition }
-        }
-    },
-    mounted() {
-        setInterval(() => {
-            this.index = (this.index + 1) % this.slides.length;
-        }, 3000);
-    }
-});
-app.mount('#app');
-
-*/
-
-// --- LÓGICA DEL CARRUSEL (JS PURO) ---
-let currentIndex = 0;
-function moverCarrusel() {
-    const track = document.querySelector('.carousel-track');
-    const slides = document.querySelectorAll('.slide');
-    
-    if (!track || slides.length === 0) return;
-
-    currentIndex++;
-
-    // Si llegamos al final, volvemos al principio
-    if (currentIndex >= slides.length) {
-        currentIndex = 0;
+    // Foto actual
+    function mostrar() {
+        // Recorre las fotos y les quita la clase 'activa' es decir las opaca todas gracias a la clase activa del CSS
+        fotos.forEach(foto => foto.classList.remove('activa'));
+        // Luego enseña solo la que coincide con el número 'indice', el número índice es la foto en la que estamos
+        fotos[indice].classList.add('activa');
     }
 
-    const desplazamiento = currentIndex * -100;
-    track.style.transform = `translateX(${desplazamiento}%)`;
-}
+    function siguiente() {
+        indice = indice + 1;
+        if (indice >= fotos.length) {
+            indice = 0; // Si llega al final, vuelve a la primera
+        }
+        mostrar();
+    }
+    function anterior() {
+        indice = indice - 1;
+        if (indice < 0) {
+            indice = fotos.length - 1; // Si baja de 0, va a la última
+        }
+        mostrar();
+    }
 
-// Iniciar el movimiento automático cada 3 segundos
-setInterval(moverCarrusel, 2000);
+    document.getElementById('btn-next').addEventListener('click', () => {
+        siguiente();
+    });
 
+    document.getElementById('btn-prev').addEventListener('click', () => {
+        anterior();
+    });
 
+    // Cada 2000 milisegundos (2 segundos) llama a la función siguiente()
+    setInterval(siguiente, 2000);
 
-// --- LÓGICA JS PURO ---
+    // Al arrancar, muestra la primera foto
+    mostrar();
 
-
+// --------------------MENÚ DESPLEGABLE---------------------
     menu = document.getElementById('lista-desplegable');
     // Muestro el menú al hacer click en productos
     function mostrarMenu() {
@@ -59,20 +47,6 @@ setInterval(moverCarrusel, 2000);
         
     }
 
-/*
-    // toggle añade la clase si no está, y la quita si ya está
-    menu.classList.toggle('visible');
-
-    // Comprobamos si quedó visible para ajustar el display manual que pusiste
-    if (menu.classList.contains('visible')) {
-        menu.style.setProperty('display', 'block', 'important');
-    } else {
-        menu.style.setProperty('display', 'none', 'important');
-    }
-
-*/
-
-    
     // Evento para el botón de productos
     document.getElementById('link-productos').addEventListener('click', (e) => {
         e.preventDefault();
@@ -80,7 +54,6 @@ setInterval(moverCarrusel, 2000);
         mostrarMenu();
     });
     
-
     // Cerrar al clicar fuera
     document.addEventListener('click', () => {
         if (menu) {
