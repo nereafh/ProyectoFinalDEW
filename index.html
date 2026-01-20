@@ -46,6 +46,19 @@
                         <option value="en">EN</option>
                     </select>
                 </div>
+
+                <!-- Modal/Ventana emergente para la autenticación -->
+                <div id="modal" class="modal-estructura-externa" style="display:none;">
+                    <div class="modal-extructura-interna">
+                        <button type="submit"  id="btn-cerrar-modal" class="btn-cerrar">X</button>
+                        <div id="contenido-modal"> 
+                            <!-- Aquí se mostrará el contenido del modal -->
+                            <h3 class="text-center">Bienvenido</h3>
+                            <button type="submit" class="btn btn-dark" id="btn-ir-login">Iniciar Sesión</button>
+                            <button type="submit" class="btn btn-outline-dark" id="btn-ir-registro">Registrarse</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -61,7 +74,8 @@
           <div class="slide"><img src="img/juguete1.jpg" alt="Juguete1"></div>
           <div class="slide"><img src="img/higiene2.jpg" alt="Higiene2"></div>
           <div class="slide"><img src="img/juguete2.jpg" alt="Juguete2"></div>
-          <!-- Clon de la primera <div class="slide"><img src="https://www.cifpzonzamas.es/img/noticias/01KC8ZJRF3Q9B790FD0JAN7CTV.png" alt=""></div> -->
+          <!-- Clon de la primera --
+           <div class="slide"><img src="https://www.cifpzonzamas.es/img/noticias/01KC8ZJRF3Q9B790FD0JAN7CTV.png" alt=""></div> -->
         </div>
         <!--Botones para pasar las fotos manualmente-->
         <button id="btn-prev" type="button" class="prev"><</button>
@@ -69,6 +83,7 @@
       </div>    
       
 
+      <!-- Contenido que se muestra al seleccionar una categoría del menú desplegable de Productos-->
     <main id="main-content" class="container my-5">
         <div class="text-center">
             <h1>Bienvenidos a Mundo Mascota</h1>
@@ -82,6 +97,7 @@
             <p class="text-muted">Explora nuestras categorías para ver ofertas.</p>
         </div>
     </aside>
+
 
     <!-- Footer-->
     <footer class="bg-dark text-white text-center py-4 mt-5">
