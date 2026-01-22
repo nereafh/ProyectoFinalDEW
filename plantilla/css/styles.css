@@ -130,9 +130,9 @@ Estructura externa e interna
     height: 100%;
     background: rgba(0, 0, 0, 0.541); 
     z-index: 10000; /* Coloca la ventana emergente encima de todo */
-    display: flex; 
     justify-content: center; 
     align-items: center;
+    display:none; /*hace que desaparezca, ajusta el ancho, con visibility:hidden; el ancho permanece, opacity: 0; transparentes e interactuables*/
 }
 .modal-extructura-interna {
     background: white; 
@@ -154,4 +154,82 @@ margin-bottom: 10px;
 #btn-ir-registro {
 width: 360px;
 height: 50px;
+}
+
+#btnEntrar {
+background-color:#1e1d1d;
+color:white;
+padding: 5px;
+border-radius: 5px;
+cursor: pointer;
+width: 100%;
+}
+#btnEntrar:hover {
+    background-color:  #444; /* Un gris más claro */
+}
+.btnFinalizarReg {
+background-color:#1e1d1d;
+color:white;
+padding: 5px;
+border-radius: 5px;
+cursor: pointer;
+width: 100%;
+
+}
+.btnFinalizarReg:hover {
+    background-color:  #444; /* Un gris más claro */
+}
+
+#seccion-login {
+
+    display: none;
+}
+#seccion-reg {
+    
+    display: none;
+}
+
+#errorMsgLogin{
+    color: red;
+    margin-top: 10px;
+}
+
+
+#loginEmail{
+    border-color: rgb(227, 227, 225);
+    border-radius: 5px;
+    width: 100%;
+    outline: none;
+    margin: 3px;
+    height: 40px;
+}
+
+#loginEmail:focus{
+    outline: none;
+    background-color: #ffffff;
+    border-color: #86b7fe; /* Un azul muy claro */
+    /* Esta sombra es la que da el efecto 'suave' */
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); 
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    border-radius: 5px;
+}
+
+#loginPass{
+
+    border-color: rgb(227, 227, 225);
+    border-radius: 5px;
+    width: 100%;
+    outline: none;
+    margin: 3px;
+    height: 40px;
+}
+
+#loginPass:focus{
+    outline: none;
+    background-color: #ffffff;
+    border-color: #86b7fe; /* Un azul muy claro */
+    /* Esta sombra es la que da el efecto 'suave' */
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); 
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    border-radius: 5px;
 }

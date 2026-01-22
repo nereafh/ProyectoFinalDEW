@@ -80,116 +80,180 @@
 
 
 
-//--------------------BOTÓN LOGIN---------------------
+//--------------------INICIAR SESIÓN/REGISTRARSE---------------------
 
 const contenido = document.getElementById('contenido-modal');
 const modal = document.getElementById('modal');
+const seccionMenu = document.getElementById('seccion-menu');
+const seccionLogin = document.getElementById('seccion-login');
+const seccionReg = document.getElementById('seccion-reg');
 
-document.getElementById('btn-login').addEventListener('click', () => {
+
+document.getElementById("btn-login").addEventListener("click", e => {
+    e.preventDefault();
     modal.style.display = 'flex'; //Muestra el menú de login/registro
 });
-document.getElementById('btn-cerrar-modal').addEventListener('click', () => {
+
+document.getElementById('btn-cerrar-modal').addEventListener('click', e => {
+    e.preventDefault();
     modal.style.display = 'none'; //Deja de mostrar el menú de login/registro
 });
 
-document.getElementById('btn-ir-login').addEventListener('onclick', () => {
-    mostrarFormLogin();
+
+
+//Botones login y registro
+document.getElementById("btn-ir-login").addEventListener('click', e => {
+    e.preventDefault();
+    cambiarVista('login');
 });
-document.getElementById('btn-ir-registro').addEventListener('onclick', () => {
-    mostrarFormLogin();
+document.getElementById("btn-ir-registro").addEventListener('click', e => {
+    e.preventDefault();
+    cambiarVista('registro');
 });
 
+//Cambiar vista
+function cambiarVista(vista){
+    //Empiezan todas ocultas:
+    seccionMenu.style.display = 'none';
+    seccionLogin.style.display = 'none';
+    seccionReg.style.display = 'none';
 
+    switch(vista){
+        case 'menu': 
+            seccionMenu.style.display = 'block';
+        break;
 
-// --- VISTA LOGIN ---
-function mostrarFormLogin() {
-    contenido.innerHTML = `
-        <h4>Iniciar Sesión</h4>
-        <div id="mensaje-error" class="text-danger mb-2"></div>
-        <input type="email" id="email-login" class="form-control mb-2" placeholder="Correo electrónico" required>
-        <input type="password" id="pass-login" class="form-control mb-2" placeholder="Contraseña" required>
-        <button class="btn btn-primary w-100" id="enviar-login">Entrar</button>
-        <button class="btn btn-link w-100 mt-2" id="volver-menu">Volver atrás</button>
-    `;
+        case 'login': 
+            seccionLogin.style.display = 'block';
+        break;
 
-    document.getElementById('volver-menu').addEventListener('click', abrirMenuOpciones);
+        case 'registro': 
+            seccionReg.style.display = 'block';
+        break;
 
-    document.getElementById('enviar-login').addEventListener('click', async () => {
-        const email = document.getElementById('email-login').value;
-        const pass = document.getElementById('pass-login').value;
+        default:
+            seccionMenu.style.display = 'none';
+        break;
 
-        // AJAX enviando datos a procesar_login.php
-        const datos = new FormData();
-        datos.append('correo_electronico', email);
-        datos.append('contrasena', pass);
-
-        const respuesta = await fetch('procesar_login.php', { method: 'POST', body: datos });
-        const texto = await respuesta.text();
-
-        if (texto.includes("Bienvenido")) {
-            alert(texto);
-            location.reload(); // Recarga para mostrar que ya entró
-        } else {
-            // Si no está en la BBDD, sale el mensaje del enunciado
-            document.getElementById('mensaje-error').innerHTML = "Usuario no encontrado. <b>Debes registrarte primero.</b>";
-        }
-    });
+    }
 }
 
-// --- VISTA REGISTRO ---
-function mostrarFormRegistro() {
-    contenidoModal.innerHTML = `
-        <h4>Formulario de Registro</h4>
-        <input type="text" id="reg-nombre" class="form-control mb-2" placeholder="Nombre completo">
-        <input type="email" id="reg-email" class="form-control mb-2" placeholder="Correo electrónico">
-        <input type="text" id="reg-iban" class="form-control mb-2" placeholder="Cuenta bancaria (ES...)">
-        <input type="text" id="reg-tel" class="form-control mb-2" placeholder="Número de teléfono (9 dígitos)">
-        <input type="password" id="reg-pass" class="form-control mb-2" placeholder="Contraseña">
-        <button class="btn btn-success w-100" id="enviar-registro">Registrar e Ingresar</button>
-        <button class="btn btn-link w-100 mt-2" id="volver-menu">Volver atrás</button>
-    `;
 
-    document.getElementById('volver-menu').addEventListener('click', abrirMenuOpciones);
 
-    document.getElementById('enviar-registro').addEventListener('click', async () => {
-        // Recoger valores
-        const nombre = document.getElementById('reg-nombre').value;
-        const email = document.getElementById('reg-email').value;
-        const iban = document.getElementById('reg-iban').value;
-        const tel = document.getElementById('reg-tel').value;
-        const pass = document.getElementById('reg-pass').value;
+//Botones volver y entrar
+document.querySelectorAll('.btn-volver').forEach(cadaBotonVolver => {
+    cadaBotonVolver.addEventListener('click', (e) => {
+        e.preventDefault();
+        cambiarVista('menu');
+    });
+});
 
-        // --- VALIDACIÓN REGEX ---
-        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const regexIban = /^ES\d{22}$/; // Ejemplo: ES + 22 números
-        const regexTel = /^[6789]\d{8}$/; // Empieza por 6,7,8 o 9 y tiene 8 más
+document.getElementById('btnEntrar').addEventListener('click', e => {
+    enviarLogin();
+});
+document.getElementById('btnFinalizarReg').addEventListener('click', e => {
+    enviarRegistro();
+});
 
-        if (!nombre) return alert("El nombre es obligatorio");
-        if (!regexEmail.test(email)) return alert("El correo no es válido");
-        if (!regexIban.test(iban)) return alert("El IBAN debe ser ES seguido de 22 números");
-        if (!regexTel.test(tel)) return alert("El teléfono debe tener 9 dígitos y empezar por 6, 7, 8 o 9");
-        if (pass.length < 4) return alert("La contraseña es muy corta");
+//Login  
+async function enviarLogin() {
+    const inputEmail = document.getElementById('loginEmail');
+    const inputPass = document.getElementById('loginPass');
+    const errorMsg = document.getElementById('errorMsgLogin');
+    
+    /*
+    FormData crea un conjunto de pares clave/valor, luego se envian mediante una solicitud fetch o XMLHttpRequest.
 
-        // Si todo es correcto, AJAX a procesar_registro.php
-        const datosReg = new FormData();
-        datosReg.append('nombre', nombre);
-        datosReg.append('correo_electronico', email);
-        datosReg.append('cuenta_bancaria', iban);
-        datosReg.append('telefono', tel);
-        datosReg.append('contrasena', pass);
-        datosReg.append('id', Date.now()); // Generamos un ID simple
+    nombreObjetoFormData.append('clave', 'valor'); -> agrega un nuevo par clave/valor al objeto FormData.
+    clave sería el nombre del campo del formulario y valor sería el valor que se quiere enviar.
+    */
+    const datosFormulario = new FormData(); 
+    datosFormulario.append('correo_electronico', inputEmail.value);
+    datosFormulario.append('contrasena', inputPass.value);
 
-        const respuesta = await fetch('procesar_registro.php', { method: 'POST', body: datosReg });
-        const resultado = await respuesta.text();
+    const respuestaFetch = await fetch('bbdd/procesar_login.php', { method: 'POST', body: datosFormulario });
+    const texto = await respuestaFetch.text(); //Convertir la respuesta en texto
+
+    
+    //sessionStorage.setItem('clave', 'valor'); -> almacena datos en el sessionStorage del navegador.
+    if (texto.includes("Bienvenido")) {
+        const nombreUsuario = texto.split(', ')[1].replace('!', ''); 
+        sessionStorage.setItem('usuarioLogueado', nombreUsuario);
+        location.reload(); // Recarga para entrar
+    } else {
+        inputEmail.style.border = "2px solid red";
+        inputPass.style.border = "2px solid red";
+        errorMsg.innerText = "Debes registrarte primero, el correo o contraseña no existe.";
+    }
+}
+
+//Registro
+async function enviarRegistro() {
+    const inNombre = document.getElementById('regNombre');
+    const inEmail = document.getElementById('regEmail');
+    const inIban = document.getElementById('regIban');
+    const inTel = document.getElementById('regTel');
+    
+    // Reset bordes
+    [inNombre, inEmail, inIban, inTel].forEach(i => i.style.border = "1px solid #ced4da");
+
+    // Validaciones básicas
+    const rNombre = /^[a-zA-Z\s]{2,50}$/;
+    const rEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const rIban = /^ES\d{22}$/; 
+    const rTel = /^[6789]\d{8}$/; 
+
+    let error = false;
+    if (!rNombre.test(inNombre.value)) { inNombre.style.border = "2px solid red"; error = true; }
+    if (!rEmail.test(inEmail.value)) { inEmail.style.border = "2px solid red"; error = true; }
+    if (!rIban.test(inIban.value)) { inIban.style.border = "2px solid red"; error = true; }
+    if (!rTel.test(inTel.value)) { inTel.style.border = "2px solid red"; error = true; }
+
+    if (error) return;
+
+    const datosFormulario = new FormData();
+    datosFormulario.append('nombre', document.getElementById('regNombre').value);
+    datosFormulario.append('correo_electronico', inEmail.value);
+    datosFormulario.append('cuenta_bancaria', inIban.value);
+    datosFormulario.append('telefono', inTel.value);
+    datosFormulario.append('contrasena', document.getElementById('regPass').value);
+
+    const res = await fetch('bbdd/procesar_registro.php', { method: 'POST', body: datosFormulario });
+    const data = await res.text();
+    
+    if (data.includes("exitoso")) {
+        alert("Bienvenido");
+        location.reload();
+    } else {
+        alert("Error: " + data); // Aquí podrías poner un mensaje bajo el input también
+    }
+}
+
+function comprobarSesionStorage() {
+    const nombre = sessionStorage.getItem('usuarioLogueado');
+
+    if (nombre) {
+        // Si existe el nombre, modificamos el menú
+        const btnLogin = document.getElementById('btn-login');
         
-        alert(resultado);
-        if (resultado.includes("exitoso")) {
-            location.reload();
-        }
-    });
+        // Cambiamos el icono por el nombre y un botón de cerrar sesión
+        btnLogin.parentElement.innerHTML = `
+            <button class="btn btn-outline-light me-2" id="btn-carrito">🛒</button>
+            <span class="text-white me-2">${nombre}</span>
+            <button class="btn btn-sm btn-outline-danger" id="btn-logout">Salir</button>
+            <select id="selector-idioma" class="form-select form-select-sm" style="width: auto;">
+                <option value="es">ES</option>
+                <option value="en">EN</option>
+            </select>
+        `;
+
+        // Lógica para cerrar sesión
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            sessionStorage.removeItem('usuarioLogueado'); // Borramos el dato
+            location.reload(); // Recargamos para que vuelva a salir el icono 👤
+        });
+    }
 }
 
-
-
-
-
+// Ejecutamos la comprobación siempre que cargue la página
+comprobarSesionStorage();

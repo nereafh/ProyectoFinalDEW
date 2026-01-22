@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     correo_electronico VARCHAR(100) NOT NULL UNIQUE,
-    cuenta_bancaria VARCHAR(20),
+    cuenta_bancaria VARCHAR(30),
     telefono VARCHAR(15),
     contrasena VARCHAR(255) NOT NULL,  
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP

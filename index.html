@@ -48,14 +48,38 @@
                 </div>
 
                 <!-- Modal/Ventana emergente para la autenticación -->
-                <div id="modal" class="modal-estructura-externa" style="display:none;">
+                <div id="modal" class="modal-estructura-externa">
                     <div class="modal-extructura-interna">
                         <button type="submit"  id="btn-cerrar-modal" class="btn-cerrar">X</button>
                         <div id="contenido-modal"> 
                             <!-- Aquí se mostrará el contenido del modal -->
-                            <h3 class="text-center">Bienvenido</h3>
-                            <button type="submit" class="btn btn-dark" id="btn-ir-login">Iniciar Sesión</button>
-                            <button type="submit" class="btn btn-outline-dark" id="btn-ir-registro">Registrarse</button>
+                            <!-- Opciones del menú -->
+                            <div id="seccion-menu"> 
+                                <h3 class="text-center">Bienvenido</h3>
+                                <button type="submit" class="btn btn-dark" id="btn-ir-login">Iniciar Sesión</button>
+                                <button type="submit" class="btn btn-outline-dark" id="btn-ir-registro">Registrarse</button>
+                            </div>
+                            <!-- Formulario Inicio Sesión -->
+                            <div id="seccion-login">
+                                <h4>Iniciar Sesión</h4>
+                                <p id="errorMsgLogin"></p>
+                                <input type="email" id="loginEmail" placeholder="Correo electrónico" >
+                                <input type="password" id="loginPass" placeholder="Contraseña">
+                                <button type="submit" id="btnEntrar" class="btnEntrar">Entrar</button>
+                                <button type="submit" id="btnVolver" class="btn btn-link w-100 btn-volver">Volver</button>
+                            </div>
+                            <!-- Formulario Registro -->
+                            <div id="seccion-reg">
+                                <h4>Registro de Usuario</h4>
+                                <input type="text" id="regNombre" placeholder="Nombre" class="form-control mb-2">
+                                <input type="email" id="regEmail" placeholder="Correo electrónico" class="form-control mb-2">
+                                <input type="text" id="regIban" placeholder="ES + 22 dígitos" class="form-control mb-2">
+                                <input type="text" id="regTel" placeholder="Teléfono" class="form-control mb-2">
+                                <input type="password" id="regPass" placeholder="Contraseña" class="form-control mb-2">
+                                <button type="submit" id="btnFinalizarReg" class="btnFinalizarReg">Registrar</button>
+                                <button  type="submit" id="btnVolver" class="btn btn-link w-100 btn-volver">Volver</button>
+                            </div>
+
                         </div>
                     </div>
                 </div>

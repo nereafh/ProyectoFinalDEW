@@ -19,14 +19,14 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recoger los datos del formulario
     $nombre = $conn->real_escape_string($_POST['nombre']);
-    $id = $conn->real_escape_string($_POST['id']);
+    //$id = $conn->real_escape_string($_POST['id']); no lo recojo porque es AUTO_INCREMENT
     $email = $conn->real_escape_string($_POST['correo_electronico']);
     $cuenta_bancaria = $conn->real_escape_string($_POST['cuenta_bancaria']);
     $telefono = $conn->real_escape_string($_POST['telefono']);
     $password = $_POST['contrasena'];
 
     // Validar que los campos no estén vacíos
-    if (empty($nombre) || empty($id) || empty($email) || empty($password)) {
+    if (empty($nombre) || empty($email) || empty($password)) {
         echo "Por favor, rellena todos los campos obligatorios.";
         exit;
     }
@@ -35,15 +35,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password_hashed = password_hash($password, PASSWORD_BCRYPT);
 
     // Verificar si el correo ya existe
-    $sql_check = "SELECT * FROM usuarios WHERE correo_electronico = '$email' OR id = '$id'";
+    $sql_check = "SELECT * FROM clientes WHERE correo_electronico = '$email' "; //OR id = '$id'
     $result_check = $conn->query($sql_check);
 
     if ($result_check->num_rows > 0) {
         echo "El correo electrónico o el ID ya están registrados.";
     } else {
         // Insertar el nuevo usuario en la base de datos
-        $sql = "INSERT INTO usuarios (nombre, id, correo_electronico, cuenta_bancaria, telefono, contrasena)
-                VALUES ('$nombre', '$id', '$email', '$cuenta_bancaria', '$telefono', '$password_hashed')";
+        $sql = "INSERT INTO clientes (nombre, correo_electronico, cuenta_bancaria, telefono, contrasena)
+                VALUES ('$nombre', '$email', '$cuenta_bancaria', '$telefono', '$password_hashed')";
         if ($conn->query($sql) === TRUE) {
             echo "Registro exitoso. Puedes iniciar sesión.";
         } else {
