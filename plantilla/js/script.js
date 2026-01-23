@@ -44,7 +44,7 @@
     // Muestro el menú al hacer click en productos
     function mostrarMenu() {
         menu.classList.add('visible'); //Añade la clase visible del CSS, gracias a display block !important muestra el menú
-        menu.style.setProperty('display', 'block', 'important');
+        menu.style.setProperty('display', 'block', 'important'); // Lo muestra
         
     }
 
@@ -55,11 +55,17 @@
         mostrarMenu();
     });
     
-    // Cerrar al clicar fuera
-    document.addEventListener('click', () => {
-        if (menu) {
-            menu.classList.remove('visible');
-            menu.style.setProperty('display', 'none', 'important');
+
+    //Cerrar al clicar fuera del contenido
+    /*
+    e.target -> representa el elemento en el que se hizo clic.
+    menu.contains(e.target) -> verifica si el elemento clicado está dentro del menú desplegable.
+    Si el clic no es dentro del menú se cierra el menú.
+    */
+    document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target)) {
+            menu.classList.remove('visible'); //Quita la clase visible del CSS, gracias a display none !important oculta el menú
+            menu.style.setProperty('display', 'none', 'important'); // Lo oculta
         }
     });
 
@@ -82,23 +88,25 @@
 
 //--------------------INICIAR SESIÓN/REGISTRARSE---------------------
 
-const contenido = document.getElementById('contenido-modal');
-const modal = document.getElementById('modal');
+const contenido = document.getElementById('contenido');
+const estFormulario = document.querySelector('.estFormulario');
 const seccionMenu = document.getElementById('seccion-menu');
 const seccionLogin = document.getElementById('seccion-login');
 const seccionReg = document.getElementById('seccion-reg');
+const mainContent = document.getElementById('main-content');
 
 
 document.getElementById("btn-login").addEventListener("click", e => {
     e.preventDefault();
-    modal.style.display = 'flex'; //Muestra el menú de login/registro
+    mainContent.style.display = 'none'; //Oculta el contenido principal
+    estFormulario.style.display = 'flex'; //Muestra el menú de login/registro
 });
 
-document.getElementById('btn-cerrar-modal').addEventListener('click', e => {
+document.getElementById('btn-cerrar').addEventListener('click', e => {
     e.preventDefault();
-    modal.style.display = 'none'; //Deja de mostrar el menú de login/registro
+    mainContent.style.display = 'block'; //Muestra el contenido principal
+    estFormulario.style.display = 'none'; //Deja de mostrar el menú de login/registro
 });
-
 
 
 //Botones login y registro
@@ -110,6 +118,16 @@ document.getElementById("btn-ir-registro").addEventListener('click', e => {
     e.preventDefault();
     cambiarVista('registro');
 });
+
+/*
+Cerrar al clicar fuera del contenido
+estFormulario.addEventListener('click', e => {
+    if (e.target === estFormulario) {
+        estFormulario.style.display = 'none';
+    }
+});
+*/
+
 
 //Cambiar vista
 function cambiarVista(vista){
@@ -189,27 +207,79 @@ async function enviarLogin() {
 
 //Registro
 async function enviarRegistro() {
-    const inNombre = document.getElementById('regNombre');
+
+    const reglas = {
+
+    // Validaciones básicas
+     Nombre: /^[a-zA-Z\s]{2,50}$/,
+     Email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+     Iban: /^ES\d{22}$/,
+     Tel: /^[6789]\d{8}$/,
+     Pass: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+
+    }
+    
+    let error = false;
     const inEmail = document.getElementById('regEmail');
     const inIban = document.getElementById('regIban');
     const inTel = document.getElementById('regTel');
+    const inNombre = document.getElementById('regNombre');
+    const inPass = document.getElementById('regPass');
+
+
+    // Validar Nombre
+    //Lo que hace .value es obtener el valor actual del campo de entrada (input) en un formulario HTML.
+    if (!reglas.Nombre.test(inNombre.value)) {
+        document.getElementById('regNombre').style.border = "2px solid red";
+        document.getElementById('errNombre').style.display = 'block'; // Muestra el mensaje de error
+        error = true;
+    } else {
+        document.getElementById('regNombre').style.border = "rgb(227, 227, 225) solid 1px";
+        document.getElementById('errNombre').style.display = 'none';  // Oculta el mensaje de error
+    }
+
+    // Validar Email
+    if (!reglas.Email.test(inEmail.value)) {
+        document.getElementById('regEmail').style.border = "2px solid red";
+        document.getElementById('errEmail').style.display = 'block'; 
+        error = true;
+    } else {
+        document.getElementById('regEmail').style.border = "rgb(227, 227, 225) solid 1px";
+        document.getElementById('errEmail').style.display = 'none'; 
+    }
+
+    // Validar IBAN
+    if (!reglas.Iban.test(inIban.value)) {
+        document.getElementById('regIban').style.border = "2px solid red";
+        document.getElementById('errIban').style.display = 'block'; 
+        error = true;
+    } else {
+        document.getElementById('regIban').style.border = "rgb(227, 227, 225) solid 1px";
+        document.getElementById('errIban').style.display = 'none'; 
+    }
+
+
+    // Validar Teléfono
+    if (!reglas.Tel.test(inTel.value)) {
+        document.getElementById('regTel').style.border = "2px solid red";
+        document.getElementById('errTel').style.display = 'block'; 
+        error = true;
+    } else {
+        document.getElementById('regTel').style.border = "rgb(227, 227, 225) solid 1px";
+        document.getElementById('errTel').style.display = 'none'; 
+    }
+
+    // Validar Contraseña
+    if (!reglas.Pass.test(inPass.value)) {
+        document.getElementById('regPass').style.border = "2px solid red";
+        document.getElementById('errContrasena').style.display = 'block'; 
+        error = true;
+    } else {
+        document.getElementById('regPass').style.border = "rgb(227, 227, 225) solid 1px";
+        document.getElementById('errContrasena').style.display = 'none'; 
+    }
     
-    // Reset bordes
-    [inNombre, inEmail, inIban, inTel].forEach(i => i.style.border = "1px solid #ced4da");
 
-    // Validaciones básicas
-    const rNombre = /^[a-zA-Z\s]{2,50}$/;
-    const rEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const rIban = /^ES\d{22}$/; 
-    const rTel = /^[6789]\d{8}$/; 
-
-    let error = false;
-    if (!rNombre.test(inNombre.value)) { inNombre.style.border = "2px solid red"; error = true; }
-    if (!rEmail.test(inEmail.value)) { inEmail.style.border = "2px solid red"; error = true; }
-    if (!rIban.test(inIban.value)) { inIban.style.border = "2px solid red"; error = true; }
-    if (!rTel.test(inTel.value)) { inTel.style.border = "2px solid red"; error = true; }
-
-    if (error) return;
 
     const datosFormulario = new FormData();
     datosFormulario.append('nombre', document.getElementById('regNombre').value);
@@ -225,9 +295,17 @@ async function enviarRegistro() {
         alert("Bienvenido");
         location.reload();
     } else {
-        alert("Error: " + data); // Aquí podrías poner un mensaje bajo el input también
+        console.log("Error: " + data); // Aquí podrías poner un mensaje bajo el input también
     }
 }
+
+
+
+
+
+
+
+
 
 function comprobarSesionStorage() {
     const nombre = sessionStorage.getItem('usuarioLogueado');

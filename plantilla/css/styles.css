@@ -119,42 +119,49 @@ z-index: 1000;
 
 
 
-/* Ventana emergente 
-Estructura externa e interna 
+/*
+Estructura externa e interna del formulario de login/registro
 */
-.modal-estructura-externa { 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
+.estFormulario{ 
+    width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.541); 
-    z-index: 10000; /* Coloca la ventana emergente encima de todo */
-    justify-content: center; 
+    display: none; /* Oculto por defecto */
+    justify-content: center;
     align-items: center;
-    display:none; /*hace que desaparezca, ajusta el ancho, con visibility:hidden; el ancho permanece, opacity: 0; transparentes e interactuables*/
+    /*z-index: 1000;  Asegura que esté por encima de otros elementos */ 
 }
-.modal-extructura-interna {
-    background: white; 
-    padding: 20px; 
-    border-radius: 8px;
-    width: 90%; 
-    max-width: 400px; 
-    position: relative;
+
+#main-content{
+    display: block;
 }
 
 
-#btn-ir-login {
-
-width: 360px;
-height:50px;
-margin-bottom: 10px;
-}
 
 #btn-ir-registro {
 width: 360px;
 height: 50px;
+color: white;
+background-color: #1e1d1d;
+border-radius: 5px;
+cursor: pointer;
 }
+#btn-ir-registro:hover {
+    background-color:  #444; /* Un gris más claro */
+}
+    
+#btn-ir-login {
+    width: 360px;
+    height: 50px;
+    color: white;
+    background-color: #1e1d1d;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 3px;
+    }
+#btn-ir-login:hover {
+    background-color:  #444; /* Un gris más claro */
+}
+        
 
 #btnEntrar {
 background-color:#1e1d1d;
@@ -233,3 +240,49 @@ width: 100%;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     border-radius: 5px;
 }
+#regNombre, #regEmail, #regIban, #regTel, #regPass:focus {
+    
+    border-color: rgb(227, 227, 225);
+    border-radius: 5px;
+    width: 100%;
+    outline: none;
+    margin: 3px;
+    height: 40px;
+}
+#regNombre:focus, #regEmail:focus, #regIban:focus, #regTel:focus, #regPass:focus {
+    outline: none;
+    background-color: #ffffff;
+    border-color: #86b7fe; /* Un azul muy claro */
+    /* Esta sombra es la que da el efecto 'suave' */
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); 
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    border-radius: 5px;
+}
+
+/*Mostrar mensajes error registro*/
+#errNombre, #errEmail, #errIban, #errTel, #errContrasena {
+    color: red;
+    margin-top: 5px;
+    display: none; /*Oculto por defecto */
+}
+
+#regNombre, #regEmail, #regIban, #regTel, #regPass {
+    border-color: rgb(227, 227, 225);
+    border-radius: 5px;
+    width: 100%;
+    outline: none;
+    margin: 3px;
+    height: 40px;
+}
+
+/*
+footer estilo básico
+.bg-dark {
+    align-content: center;
+    text-align: center;
+    height: 100px;
+    width: 100%;
+    color: white !important;
+    background-color: #1e1d1d !important;
+}
+*/
