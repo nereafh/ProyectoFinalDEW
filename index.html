@@ -16,26 +16,20 @@
             <a class="navbar-brand" href="index.html" id="logo">MundoMascota</a>
             
             <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html" id="btn-inicio">Inicio</a>
-                    </li>
-                                        
-                    <li class="nav-item mi-dropdown-container">
-                        <a class="nav-link" href="#" id="link-productos">
-                            Productos <span style="font-size: 0.7em;">▼</span>
-                        </a>
-                        
+                <ul class="navbar-nav">
+                
+                    <li><a class="nav-link" href="index.html" id="btn-inicio">Inicio</a></li>
+
+                        <li><a class="nav-link" href="#" id="link-productos">Productos ▼</a></li>
                         <ul id="lista-desplegable">
-                            <li><a class="item-categoria" href="#" data-id="1">Camas</a></li>
-                            <li><a class="item-categoria" href="#" data-id="2">Higiene</a></li>
-                            <li><a class="item-categoria" href="#" data-id="3">Juguetes</a></li>
+                            <li><a class="item-categoria" href="#" data-id="prod-camas">Camas</a></li>
+                            <li><a class="item-categoria" href="#" data-id="prod-higiene">Higiene</a></li>
+                            <li><a class="item-categoria" href="#" data-id="prod-juguetes">Juguetes</a></li>
+                            <li><a class="item-categoria" href="#" data-id="prod-accesorios">Accesorios</a></li>
+                            <li><a class="item-categoria" href="#" data-id="prod-comida">Alimentación</a></li>                            
                         </ul>
-                    </li>
                     
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="btn-acerca">Acerca de</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="btn-acerca">Acerca de</a></li>
                 </ul>
 
                 <div class="d-flex align-items-center">
@@ -46,7 +40,7 @@
                         <option value="en">EN</option>
                     </select>
                 </div>
-
+            </div>
         </div>
     </nav>
 
@@ -55,12 +49,16 @@
         <div class="carousel-track">
           <!-- Clon de la última <div class="slide"><img src="img/cama1.jpg" alt=""></div> -->
           <!-- Slides reales -->
-          <div class="slide"><img src="img/cama1.jpg" alt="Cama1"></div>
-          <div class="slide"><img src="img/higiene1.jpg" alt="Higiene1"></div>
-          <div class="slide"><img src="img/cama2.jpg" alt="Cama2"></div>
-          <div class="slide"><img src="img/juguete1.jpg" alt="Juguete1"></div>
-          <div class="slide"><img src="img/higiene2.jpg" alt="Higiene2"></div>
-          <div class="slide"><img src="img/juguete2.jpg" alt="Juguete2"></div>
+           <!-- data-target indica a qué sección de productos se dirige al hacer clic en la imagen 
+           se mostrarán esos productos en la división principal, con target puedo saber 
+           en qué productos estoy haciendo clic 
+           -->
+          <div class="slide"><img id="cama1" src="img/cama1.jpg" alt="Cama1"></div>
+          <div class="slide"><img id="higiene1" src="img/higiene1.jpg" alt="Higiene1"></div>
+          <div class="slide"><img  id="accesorio1" src="img/accesorio1.jpg" alt="Accesorio1"></div> 
+          <div class="slide"><img id="comida1" src="img/comida1.jpg" alt="Comida1"></div> 
+          <div class="slide"><img  id="higiene2" src="img/higiene2.jpg" alt="Higiene2"></div>
+          <div class="slide"><img id="juguete2" src="img/juguete2.jpg" alt="Juguete2"></div>
           <!-- Clon de la primera --
            <div class="slide"><img src="https://www.cifpzonzamas.es/img/noticias/01KC8ZJRF3Q9B790FD0JAN7CTV.png" alt=""></div> -->
         </div>
@@ -70,20 +68,39 @@
       </div>    
       
 
-      <!-- Contenido que se muestra al seleccionar una categoría del menú desplegable de Productos-->
-    <main id="main-content" class="container my-5">
-        <div class="text-center">
-            <h1>Bienvenidos a Mundo Mascota</h1>
-            <p class="lead">Cuidamos de tus compañeros de vida con los mejores artículos.</p>
+      <!-- DIVISIÓN PRINCIPAL-->
+    <hr class="solid"></hr>
+<main id="main-content" class="container my-5">
+        <div class="seccion-prod" id="seccion-prod">
+            <h1>Productos recomendados</h1>
         </div>
-    </main>
-
+        <div id="prod-camas">
+            <h2>Camas para Mascotas</h2>
+            <img src="img/cama1.jpg" alt="Cama para Mascotas">
+        </div>
+        <div id="prod-higiene">
+            <h2>Higiene para Mascotas</h2>
+            <img src="img/higiene1.jpg" alt="Higiene para Mascotas">
+            <img src="img/higiene2.jpg" alt="Higiene para Mascotas">
+        </div>
+        <div id="prod-juguetes">
+            <h2>Juguetes para Mascotas</h2>
+            <img src="img/juguete2.jpg" alt="Juguete para Mascotas">
+        </div> 
+        <div id="prod-accesorios">
+            <h2>Accesorios para Mascotas</h2>
+            <img src="img/accesorio1.jpg" alt="Accesorio para Mascotas">
+        </div> 
+        <div id="prod-comida">
+            <h2>Comida para Mascotas</h2>
+            <img src="img/comida1.jpg" alt="Comida para Mascotas">
+        </div> 
+    </div> 
+</main>
     
-    <!-- Autenticación en diferente división -->
-        <div class="estFormulario">
+    <!-- Autenticación en división principal -->
+        <div id="formulario-autenticacion" class="estFormulario">
             <button type="submit"  id="btn-cerrar" class="btn-cerrar">X</button>
-            <div id="contenido"> 
-                <!-- Aquí se mostrará el contenido del modal -->
                 <!-- Opciones del menú -->
                 <div id="seccion-menu"> 
                     <button type="submit" id="btn-ir-login">Iniciar Sesión</button>
@@ -119,18 +136,9 @@
                     <button type="submit" id="btnFinalizarReg" class="btnFinalizarReg">Registrar</button>
                     <button  type="submit" id="btnVolver" class="btn btn-link w-100 btn-volver">Volver</button>
                 </div>
-            </div>
-            
-
-</div>
-
-    <aside class="container border-top pt-4">
-        <h4>Productos Recomendados</h4>
-        <div id="recomendados-lista" class="row text-center py-3">
-            <p class="text-muted">Explora nuestras categorías para ver ofertas.</p>
         </div>
-    </aside>
 
+ 
 
     <!-- Footer-->
     <footer class="bg-dark text-white text-center py-4 mt-5">

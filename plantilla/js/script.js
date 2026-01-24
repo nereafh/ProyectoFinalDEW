@@ -40,19 +40,18 @@
     mostrar();
 
 // --------------------MENÚ DESPLEGABLE---------------------
-    menu = document.getElementById('lista-desplegable');
+    const menu = document.getElementById('lista-desplegable');
     // Muestro el menú al hacer click en productos
+
     function mostrarMenu() {
-        menu.classList.add('visible'); //Añade la clase visible del CSS, gracias a display block !important muestra el menú
-        menu.style.setProperty('display', 'block', 'important'); // Lo muestra
+       menu.style.display = 'block'; // Lo muestra
         
     }
-
     // Evento para el botón de productos
     document.getElementById('link-productos').addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        mostrarMenu();
+        mostrarMenu(); //menu.style.display = 'block';
     });
     
 
@@ -69,26 +68,57 @@
         }
     });
 
-    // Lógica para las categorías (que cambie el contenido)
-    document.querySelectorAll('.item-categoria').forEach(categoria => {
-        categoria.addEventListener('click', (e) => {
-            e.preventDefault();
-            const nombre = categoria.innerText;
-            document.getElementById('main-content').innerHTML = `
-                <h2>Sección: ${nombre}</h2>
-                <p>Aquí verás todos nuestros productos de la categoría ${nombre}.</p>
-            `;
-            // El menú se cerrará solo por el evento 'click' del documento
-        });
-    });
 
+//--------------------MOSTRAR INFORMACIÓN PRODUCTOS EN DIVPRINCIPAL---------------------------
+//Oculto todo
+function ocultarProductos(){
+    document.getElementById('prod-camas').style.display = 'none';
+    document.getElementById('prod-higiene').style.display = 'none';
+    document.getElementById('prod-juguetes').style.display = 'none';
+    document.getElementById('prod-accesorios').style.display = 'none';
+    document.getElementById('prod-comida').style.display = 'none';
+}
 
+//Evento para cada sección del menú usando los item-categoria
+const itemCategorias = document.querySelectorAll('.item-categoria');
+//Primer índice camas, segundo higiene, tercero juguetes, cuarto accesorios, quinto comida
+itemCategorias[0].addEventListener('click', e => {
+    e.preventDefault();
+    ocultarProductos();
+    document.getElementById('prod-camas').style.display = 'block';
+    menu.style.display = 'none'; //Oculto el menú al clicar
+});
 
+itemCategorias[1].addEventListener('click', e => {
+    e.preventDefault();
+    ocultarProductos();
+    document.getElementById('prod-higiene').style.display = 'block';
+    menu.style.display = 'none'; //Oculto el menú al clicar
+});
+
+itemCategorias[2].addEventListener('click', e => {
+    e.preventDefault();
+    ocultarProductos();
+    document.getElementById('prod-juguetes').style.display = 'block';
+    menu.style.display = 'none'; //Oculto el menú al clicar
+});
+
+itemCategorias[3].addEventListener('click', e => {
+    e.preventDefault();
+    ocultarProductos();
+    document.getElementById('prod-accesorios').style.display = 'block';
+    menu.style.display = 'none'; //Oculto el menú al clicar
+});
+
+itemCategorias[4].addEventListener('click', e => {
+    e.preventDefault();
+    ocultarProductos();
+    document.getElementById('prod-comida').style.display = 'block';
+    menu.style.display = 'none'; //Oculto el menú al clicar
+});
 
 
 //--------------------INICIAR SESIÓN/REGISTRARSE---------------------
-
-const contenido = document.getElementById('contenido');
 const estFormulario = document.querySelector('.estFormulario');
 const seccionMenu = document.getElementById('seccion-menu');
 const seccionLogin = document.getElementById('seccion-login');
@@ -129,6 +159,22 @@ estFormulario.addEventListener('click', e => {
 */
 
 
+//Botones volver y entrar
+document.querySelectorAll('.btn-volver').forEach(cadaBotonVolver => {
+    cadaBotonVolver.addEventListener('click', (e) => {
+        e.preventDefault();
+        cambiarVista('menu');
+    });
+});
+
+document.getElementById('btnEntrar').addEventListener('click', e => {
+    enviarLogin();
+});
+document.getElementById('btnFinalizarReg').addEventListener('click', e => {
+    enviarRegistro();
+});
+
+
 //Cambiar vista
 function cambiarVista(vista){
     //Empiezan todas ocultas:
@@ -158,20 +204,6 @@ function cambiarVista(vista){
 
 
 
-//Botones volver y entrar
-document.querySelectorAll('.btn-volver').forEach(cadaBotonVolver => {
-    cadaBotonVolver.addEventListener('click', (e) => {
-        e.preventDefault();
-        cambiarVista('menu');
-    });
-});
-
-document.getElementById('btnEntrar').addEventListener('click', e => {
-    enviarLogin();
-});
-document.getElementById('btnFinalizarReg').addEventListener('click', e => {
-    enviarRegistro();
-});
 
 //Login  
 async function enviarLogin() {
@@ -231,52 +263,52 @@ async function enviarRegistro() {
     //Lo que hace .value es obtener el valor actual del campo de entrada (input) en un formulario HTML.
     if (!reglas.Nombre.test(inNombre.value)) {
         document.getElementById('regNombre').style.border = "2px solid red";
-        document.getElementById('errNombre').style.display = 'block'; // Muestra el mensaje de error
+        document.getElementById('errNombre').style.visibility = 'visible'; // Muestra el mensaje de error
         error = true;
     } else {
         document.getElementById('regNombre').style.border = "rgb(227, 227, 225) solid 1px";
-        document.getElementById('errNombre').style.display = 'none';  // Oculta el mensaje de error
+        document.getElementById('errNombre').style.visibility = 'hidden';  // Oculta el mensaje de error
     }
 
     // Validar Email
     if (!reglas.Email.test(inEmail.value)) {
         document.getElementById('regEmail').style.border = "2px solid red";
-        document.getElementById('errEmail').style.display = 'block'; 
+        document.getElementById('errEmail').style.visibility = 'visible'; 
         error = true;
     } else {
         document.getElementById('regEmail').style.border = "rgb(227, 227, 225) solid 1px";
-        document.getElementById('errEmail').style.display = 'none'; 
+        document.getElementById('errEmail').style.visibility = 'hidden'; 
     }
 
     // Validar IBAN
     if (!reglas.Iban.test(inIban.value)) {
         document.getElementById('regIban').style.border = "2px solid red";
-        document.getElementById('errIban').style.display = 'block'; 
+        document.getElementById('errIban').style.visibility = 'visible'; 
         error = true;
     } else {
         document.getElementById('regIban').style.border = "rgb(227, 227, 225) solid 1px";
-        document.getElementById('errIban').style.display = 'none'; 
+        document.getElementById('errIban').style.visibility = 'hidden'; 
     }
 
 
     // Validar Teléfono
     if (!reglas.Tel.test(inTel.value)) {
         document.getElementById('regTel').style.border = "2px solid red";
-        document.getElementById('errTel').style.display = 'block'; 
+        document.getElementById('errTel').style.visibility = 'visible'; 
         error = true;
     } else {
         document.getElementById('regTel').style.border = "rgb(227, 227, 225) solid 1px";
-        document.getElementById('errTel').style.display = 'none'; 
+        document.getElementById('errTel').style.visibility = 'hidden'; 
     }
 
     // Validar Contraseña
     if (!reglas.Pass.test(inPass.value)) {
         document.getElementById('regPass').style.border = "2px solid red";
-        document.getElementById('errContrasena').style.display = 'block'; 
+        document.getElementById('errContrasena').style.visibility = 'visible'; 
         error = true;
     } else {
         document.getElementById('regPass').style.border = "rgb(227, 227, 225) solid 1px";
-        document.getElementById('errContrasena').style.display = 'none'; 
+        document.getElementById('errContrasena').style.visibility = 'hidden'; 
     }
     
 
@@ -308,7 +340,9 @@ async function enviarRegistro() {
 
 
 function comprobarSesionStorage() {
-    const nombre = sessionStorage.getItem('usuarioLogueado');
+    const nombre = 
+    
+    Storage.getItem('usuarioLogueado');
 
     if (nombre) {
         // Si existe el nombre, modificamos el menú

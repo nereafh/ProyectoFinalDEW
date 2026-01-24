@@ -3,8 +3,8 @@ session_start();
 
 // Conexión a la base de datos
 $servername = "localhost";
-$username = "zonzamas"; //nerea
-$password = "Csas1234!";  //nerea
+$username = "nerea"; //nerea, zonzamas
+$password = "nerea";  //nerea, Csas1234!
 $dbname = "mascotas";
 
 

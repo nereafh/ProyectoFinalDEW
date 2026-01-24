@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost'; 
-$usuario = 'nerea';    
-$contrasena = 'nerea';     
-$base_de_datos = 'mascotas';  //Cambiar según sea
+$usuario = 'nerea'; //nerea, zonzamas   
+$contrasena = 'nerea'; //nerea, Csas1234!   
+$base_de_datos = 'mascotas';  
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$base_de_datos", $usuario, $contrasena);

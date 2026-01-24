@@ -4,8 +4,8 @@
 session_start();
 
 $servername = "localhost";
-$username = "zonzamas"; //nerea
-$password = "Csas1234!";  //nerea
+$username = "nerea"; //nerea, zonzamas
+$password = "nerea";  //nerea, Csas1234!
 $dbname = "mascotas";
 
 
