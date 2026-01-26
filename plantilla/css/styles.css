@@ -43,18 +43,6 @@
 hr.solid {
   border-top: 3px solid #bbb;
 }
-#lista-desplegable {
-    position: absolute;
-    top: 95%;
-    left: 19%;
-    background-color: #1d1c1c;
-    min-width: 160px;
-    list-style: none;
-    padding: 10px 0;
-    z-index: 9999;
-    border-radius: 5px;
-    display: none; /* Oculto por defecto */
-}
 
 
 .mi-dropdown-container {
@@ -84,8 +72,9 @@ hr.solid {
   .carousel-track {
     display: flex;
     position: relative;
-    height: 400px; /* Ajusta la altura a tu gusto */
+    height: 400px; /* Ajusta la altura */
     transition: transform 0.5s ease-in-out;
+    margin-top: 40px;
 }
     
 .slide {
@@ -133,7 +122,7 @@ margin-top: 100px;
 
 #btn-prev {
 position: absolute;
-top: 30%;
+top: 35%;
 left: 700px;
 transform: translateY(-50%);
 background-color: rgba(0, 0, 0, 0.5);
@@ -146,7 +135,7 @@ z-index: 1000;
 
 #btn-next {
 position: absolute;
-top: 30%;
+top: 35%;
 right: 700px;
 transform: translateY(-50%);
 background-color: rgba(0, 0, 0, 0.5);
@@ -158,9 +147,24 @@ z-index: 1000;
 }
 
 
-#btn-acerca{
-    margin-inline-end: 700px;
+#lista-desplegable {
+    position: absolute;
+    top: 90%;    
+    display: none;
+    background-color: #1d1c1c;
+    border-radius: 5px;
+    left: 29%;
+    padding-left: 0 !important; /* Quita el margen de lista de Bootstrap */
 }
+/* Margen para separar 'Acerca de'*/
+#btn-acerca {
+    margin-left: 3px !important; 
+}
+#btn-acerca{
+   
+        display: inline-block;
+        margin-right: 600px !important;
+    }
 /*
 Estructura externa e interna del formulario de login/registro
 */

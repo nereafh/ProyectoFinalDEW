@@ -222,9 +222,8 @@ async function enviarLogin() {
     datosFormulario.append('contrasena', inputPass.value);
 
     const respuestaFetch = await fetch('bbdd/procesar_login.php', { method: 'POST', body: datosFormulario });
-    const texto = await respuestaFetch.text(); //Convertir la respuesta en texto
+    const texto = await respuestaFetch.text();
 
-    
     //sessionStorage.setItem('clave', 'valor'); -> almacena datos en el sessionStorage del navegador.
     if (texto.includes("Bienvenido")) {
         const nombreUsuario = texto.split(', ')[1].replace('!', ''); 
@@ -315,21 +314,42 @@ async function enviarRegistro() {
 
     const datosFormulario = new FormData();
     datosFormulario.append('nombre', document.getElementById('regNombre').value);
-    datosFormulario.append('correo_electronico', inEmail.value);
-    datosFormulario.append('cuenta_bancaria', inIban.value);
-    datosFormulario.append('telefono', inTel.value);
+    datosFormulario.append('correo_electronico', document.getElementById('regEmail').value);
+    datosFormulario.append('cuenta_bancaria', document.getElementById('regIban').value);
+    datosFormulario.append('telefono', document.getElementById('regTel').value);
     datosFormulario.append('contrasena', document.getElementById('regPass').value);
 
+    // Antes: fetch('./bbdd/procesar_registro.php'...)
+    // 1. Enviamos al PHP
     const res = await fetch('bbdd/procesar_registro.php', { method: 'POST', body: datosFormulario });
+    
+    // 2. Primero obtenemos el texto de la respuesta
     const data = await res.text();
     
+    const pantallaMsg = document.getElementById('msgPantallaRegistro'); // Referencia al nuevo párrafo
+
     if (data.includes("exitoso")) {
-        alert("Bienvenido");
-        location.reload();
+        // 1. Mostrar mensaje verde de éxito
+        pantallaMsg.style.color = "green";
+        pantallaMsg.innerText = "¡Bienvenido! Registro completado con éxito.";
+        
+        // 2. Esperar 2 segundos para que el usuario lo lea y recargar
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
+    
     } else {
-        console.log("Error: " + data); // Aquí podrías poner un mensaje bajo el input también
+        // Mostrar mensaje de error en rojo directamente en el formulario
+        pantallaMsg.style.color = "red";
+        pantallaMsg.innerText = "Error: " + data;
     }
 }
+
+/*
+No me funciona el registro, le doy al botón y no hace nada.
+Posible causa: La ruta del fetch en enviarRegistro() es incorrecta o el archivo bbdd/procesar_registro.php no existe o tiene errores.
+Solución: Verificar que la ruta es correcta y que el archivo PHP está presente y sin errores.
+*/
 
 
 
@@ -340,9 +360,8 @@ async function enviarRegistro() {
 
 
 function comprobarSesionStorage() {
-    const nombre = 
-    
-    Storage.getItem('usuarioLogueado');
+
+    const nombre = sessionStorage.getItem('usuarioLogueado'); // CORRECCIÓN
 
     if (nombre) {
         // Si existe el nombre, modificamos el menú
