@@ -87,6 +87,7 @@ itemCategorias[0].addEventListener('click', e => {
     ocultarProductos();
     document.getElementById('prod-camas').style.display = 'block';
     menu.style.display = 'none'; //Oculto el menú al clicar
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
 });
 
 itemCategorias[1].addEventListener('click', e => {
@@ -94,6 +95,7 @@ itemCategorias[1].addEventListener('click', e => {
     ocultarProductos();
     document.getElementById('prod-higiene').style.display = 'block';
     menu.style.display = 'none'; //Oculto el menú al clicar
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
 });
 
 itemCategorias[2].addEventListener('click', e => {
@@ -101,6 +103,7 @@ itemCategorias[2].addEventListener('click', e => {
     ocultarProductos();
     document.getElementById('prod-juguetes').style.display = 'block';
     menu.style.display = 'none'; //Oculto el menú al clicar
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
 });
 
 itemCategorias[3].addEventListener('click', e => {
@@ -108,6 +111,7 @@ itemCategorias[3].addEventListener('click', e => {
     ocultarProductos();
     document.getElementById('prod-accesorios').style.display = 'block';
     menu.style.display = 'none'; //Oculto el menú al clicar
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
 });
 
 itemCategorias[4].addEventListener('click', e => {
@@ -115,7 +119,22 @@ itemCategorias[4].addEventListener('click', e => {
     ocultarProductos();
     document.getElementById('prod-comida').style.display = 'block';
     menu.style.display = 'none'; //Oculto el menú al clicar
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
 });
+
+
+//--------------------ACERCA DE LA EMPRESA---------------------
+const acercaDe = document.getElementById('btn-acerca');
+
+acercaDe.addEventListener('click', e => {
+    e.preventDefault();
+    ocultarProductos();
+    document.getElementById('seccion-acerca-de').style.display = 'block';
+    document.getElementById('seccion-prod').style.display = 'none'; //Oculto la sección de productos
+    document.getElementById('seccion-menu').style.display = 'none'; //Oculto el menú de login/registro si estaba abierto
+    document.getElementById('seccion-reg').style.display = 'none'; //Oculto el menú de login/registro si estaba abierto
+    document.getElementById('seccion-login').style.display = 'none'; //Oculto el menú de login/registro si estaba abierto
+});     
 
 
 //--------------------INICIAR SESIÓN/REGISTRARSE---------------------
@@ -130,22 +149,27 @@ document.getElementById("btn-login").addEventListener("click", e => {
     e.preventDefault();
     mainContent.style.display = 'none'; //Oculta el contenido principal
     estFormulario.style.display = 'flex'; //Muestra el menú de login/registro
+    document.getElementById('seccion-menu').style.display = 'block'; //Oculto el menú de login/registro si estaba abierto
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
 });
 
 document.getElementById('btn-cerrar').addEventListener('click', e => {
     e.preventDefault();
     mainContent.style.display = 'block'; //Muestra el contenido principal
     estFormulario.style.display = 'none'; //Deja de mostrar el menú de login/registro
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
 });
 
 
 //Botones login y registro
 document.getElementById("btn-ir-login").addEventListener('click', e => {
     e.preventDefault();
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
     cambiarVista('login');
 });
 document.getElementById("btn-ir-registro").addEventListener('click', e => {
     e.preventDefault();
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
     cambiarVista('registro');
 });
 
@@ -164,14 +188,18 @@ document.querySelectorAll('.btn-volver').forEach(cadaBotonVolver => {
     cadaBotonVolver.addEventListener('click', (e) => {
         e.preventDefault();
         cambiarVista('menu');
+        document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
     });
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
 });
 
 document.getElementById('btnEntrar').addEventListener('click', e => {
     enviarLogin();
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
 });
 document.getElementById('btnFinalizarReg').addEventListener('click', e => {
     enviarRegistro();
+    document.getElementById('seccion-acerca-de').style.display = 'none'; //Oculto la sección de acerca de la empresa
 });
 
 
