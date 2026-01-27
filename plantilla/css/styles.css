@@ -1,7 +1,8 @@
-.seccion-prod{
+.seccion-prod {
+    flex: 0 0 100%;       /* Ocupa el 100% de la fila flex */
     text-align: center;
+    margin-bottom: 20px;
 }
-
 #accesorio1 {
     width: 450px;
     height: 450px;
@@ -149,13 +150,19 @@ z-index: 1000;
 
 #lista-desplegable {
     position: absolute;
-    top: 90%;    
+    top: 90%;       /* Justo debajo del texto */
+    right: 64%;         
     display: none;
     background-color: #1d1c1c;
     border-radius: 5px;
-    left: 29%;
-    padding-left: 0 !important; /* Quita el margen de lista de Bootstrap */
+    padding-left: 0 !important;
+    min-width: 160px;
+    z-index: 1000;   /* Para que flote por encima de todo */
 }
+#link-productos { /*el li padre debe ser relativo y sus hijos ul absolutos*/
+    position: relative;
+}
+
 /* Margen para separar 'Acerca de'*/
 #btn-acerca {
     margin-left: 3px !important; 
@@ -177,10 +184,12 @@ Estructura externa e interna del formulario de login/registro
     /*z-index: 1000;  Asegura que esté por encima de otros elementos */ 
 }
 
-#main-content{
-    display: block;
+#main-content {
+    display: flex;
+    flex-wrap: wrap;       /* Esto permite que cuando no quepan, bajen a la siguiente fila */
+    justify-content: center; /* Centra la "tabla" en pantalla */
+    gap: 20px;             /* Espacio entre las celdas */
 }
-
 
 
 #btn-ir-registro {
@@ -340,20 +349,74 @@ footer estilo básico
 
 
 /* PRODUCTOS RECOMENDADOS */
-#prod-camas {
-    display: block;
+/* Esta es la "celda" de tu tabla */
+#prod-camas, #prod-higiene, #prod-juguetes, #prod-accesorios, #prod-comida {
+    display: flex;          /* Para centrar contenido interno */
+    flex-direction: column; /* Título arriba, imagen abajo */
+    align-items: center;    /* Centra horizontalmente */
+    width: 45%;            /* Casi la mitad para que quepan 2 por fila */
+    min-width: 300px;       /* Para que no se encojan demasiado */
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #fff;
+
 }
-#prod-higiene {
-    display: block;
+#prod-camas:hover, #prod-higiene:hover, #prod-juguetes:hover, #prod-accesorios:hover, #prod-comida:hover {
+    border: 1px solid #777;
 }
-#prod-juguetes {
-    display: block;
+
+
+#prod-camas img {
+    width: 280px;           /* Ancho fijo deseado */
+    height: 200px;          /* Alto fijo deseado */
+    object-fit: cover;      /* Evita que se deformen */
+    margin-top: 40px;
+    margin-bottom: 20px;
+
 }
-#prod-accesorios {
-    display: block;
+
+
+#prod-higiene img {
+    width: 280px;           /* Ancho fijo deseado */
+    height: 200px;          /* Alto fijo deseado */
+    object-fit: cover;      /* Evita que se deformen */
+    margin-top: 40px;
 }
-#prod-comida {
-    display: block;
+
+#prod-juguetes img {
+    width: 280px;           /* Ancho fijo deseado */
+    height: 200px;          /* Alto fijo deseado */
+    object-fit: cover;      /* Evita que se deformen */
+    margin-top: 40px;
+}
+
+#prod-accesorios img {
+    width: 280px;           /* Ancho fijo deseado */
+    height: 200px;          /* Alto fijo deseado */
+    object-fit: cover;      /* Evita que se deformen */
+    margin-top: 40px;
+}
+
+#prod-comida img {
+    width: 280px;           /* Ancho fijo deseado */
+    height: 200px;          /* Alto fijo deseado */
+    object-fit: cover;      /* Evita que se deformen */
+    margin-top: 40px;
+}
+
+
+#prod-camas img {
+    width: 280px;           /* Ancho fijo deseado */
+    height: 200px;          /* Alto fijo deseado */
+    object-fit: cover;      /* Evita que se deformen */
+    margin-top: 40px;
+}
+
+#prod-camas img {
+    width: 280px;           /* Ancho fijo deseado */
+    height: 200px;          /* Alto fijo deseado */
+    object-fit: cover;      /* Evita que se deformen */
+    margin-top: 40px;
 }
 
 
