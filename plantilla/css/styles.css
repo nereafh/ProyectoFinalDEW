@@ -1,430 +1,157 @@
-.seccion-prod {
-    flex: 0 0 100%;       /* Ocupa el 100% de la fila flex */
-    text-align: center;
-    margin-bottom: 20px;
-}
-#accesorio1 {
-    width: 450px;
-    height: 450px;
-    margin-top: -15px;
+/* --- RESET Y GENERAL --- */
+#logo {
+    width: 85px;
+    height: 85px;
+    transition: transform 0.3s ease;
 }
 
-
-#comida1 {
-    width: 400px;
-    height: 400px;
-    margin-top: 5px;
+#logo:hover {
+    transform: scale(1.05);
 }
 
-#cama1 {
-    width: 350px;
-    height: 350px;
-    margin-top: 20px;
+body {
+    background-color: #f4f4f4;
 }
-
-#higiene1 {
-    width: 350px;
-    height: 350px;
-    margin-top: 20px;
-}
-
-#higiene2 {
-    width: 300px;
-    height: 300px;
-    margin-top: 40px;
-}
-
-#juguete2 {
-    width: 400px;
-    height: 370px;
-    margin-top: 25px;
-}
-
 
 hr.solid {
-  border-top: 3px solid #bbb;
+    border-top: 3px solid #bbb;
+    margin: 20px 0;
 }
 
-
-.mi-dropdown-container {
-    position: relative;
+/* --- BARRA DE NAVEGACIÓN Y DROPDOWN --- */
+#lista-desplegable {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #1d1c1c;
+    border-radius: 5px;
+    padding: 10px 0;
+    min-width: 180px;
+    z-index: 1050;
+    list-style: none;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
 }
 
 #lista-desplegable a.item-categoria {
     color: white !important;
-    text-decoration: none !important;
+    text-decoration: none;
     display: block;
-    padding: 10px 15px;
+    padding: 10px 20px;
+    transition: background 0.2s;
 }
 
 #lista-desplegable a.item-categoria:hover {
-    background-color: #495057 !important;
+    background-color: #444;
     color: #ffd700 !important;
 }
 
-/*Carrusel de imágenes*/
+/* --- CARRUSEL REACTIVO --- */
 .carousel-container {
     width: 100%;
-    max-width: 600px;
-    margin: auto;
+    max-width: 700px;
+    margin: 30px auto;
     overflow: hidden;
-  }
-
-  .carousel-track {
-    display: flex;
     position: relative;
-    height: 400px; /* Ajusta la altura */
-    transition: transform 0.5s ease-in-out;
-    margin-top: 40px;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-    
+
+.carousel-track {
+    display: flex;
+    /* La transición ahora se maneja desde el JS/Vue dinámicamente */
+}
+
 .slide {
     min-width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    opacity: 0; /* Foto invisible */
-    transition: opacity 0.8s; /* Para que el cambio sea suave */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
 .slide img {
-height: 300px;
-width: 300px;
-margin: auto;
-margin-top: 10px;
-display: block;
-}
-
-.slide.activa { /*Clase activa*/
-opacity: 1; /* Foto visible */
-}
-
-/*
-Quiero modificar el tamaño de la imagen específica en css
-para ello: 
-
-*/
-.slide img[src="img/higiene2.jpg"] {
-width: 300px;
-height: 270px;
-}
-.slide img[src="img/juguete1.jpg"] {
-width: 330px;
-height: 270px;
-}
-
-.slide img[src="img/cama2.jpg"] {
-width: 285px;
-height: 200px;
-margin-top: 100px;
-}
-
-
-#btn-prev {
-position: absolute;
-top: 35%;
-left: 700px;
-transform: translateY(-50%);
-background-color: rgba(0, 0, 0, 0.5);
-color: white;
-border: none;
-padding: 10px;
-cursor: pointer;
-z-index: 1000;  
-}
-
-#btn-next {
-position: absolute;
-top: 35%;
-right: 700px;
-transform: translateY(-50%);
-background-color: rgba(0, 0, 0, 0.5);
-color: white;
-border: none;
-padding: 10px;
-cursor: pointer;
-z-index: 1000;  
-}
-
-
-#lista-desplegable {
-    position: absolute;
-    top: 90%;       /* Justo debajo del texto */
-    right: 64%;         
-    display: none;
-    background-color: #1d1c1c;
-    border-radius: 5px;
-    padding-left: 0 !important;
-    min-width: 160px;
-    z-index: 1000;   /* Para que flote por encima de todo */
-}
-#link-productos { /*el li padre debe ser relativo y sus hijos ul absolutos*/
-    position: relative;
-}
-
-/* Margen para separar 'Acerca de'*/
-#btn-acerca {
-    margin-left: 3px !important; 
-}
-#btn-acerca{
-   
-        display: inline-block;
-        margin-right: 600px !important;
-    }
-/*
-Estructura externa e interna del formulario de login/registro
-*/
-#formulario-autenticacion { 
-    width: 100%;
-    height: 100%;
-    display: none; /* Oculto por defecto */
-    justify-content: center;
-    align-items: center;
-    /*z-index: 1000;  Asegura que esté por encima de otros elementos */ 
-}
-
-#main-content {
-    display: flex;
-    flex-wrap: wrap;       /* Esto permite que cuando no quepan, bajen a la siguiente fila */
-    justify-content: center; /* Centra la "tabla" en pantalla */
-    gap: 20px;             /* Espacio entre las celdas */
-}
-
-
-#btn-ir-registro {
-width: 360px;
-height: 50px;
-color: white;
-background-color: #1e1d1d;
-border-radius: 5px;
-cursor: pointer;
-}
-#btn-ir-registro:hover {
-    background-color:  #444; /* Un gris más claro */
-}
-    
-#btn-ir-login {
-    width: 360px;
-    height: 50px;
-    color: white;
-    background-color: #1e1d1d;
-    border-radius: 5px;
+    height: 300px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
     cursor: pointer;
-    margin-bottom: 3px;
-    }
-#btn-ir-login:hover {
-    background-color:  #444; /* Un gris más claro */
-}
-        
-
-#btnEntrar {
-background-color:#1e1d1d;
-color:white;
-padding: 5px;
-border-radius: 5px;
-cursor: pointer;
-width: 100%;
-}
-#btnEntrar:hover {
-    background-color:  #444; /* Un gris más claro */
-}
-.btnFinalizarReg {
-background-color:#1e1d1d;
-color:white;
-padding: 5px;
-border-radius: 5px;
-cursor: pointer;
-width: 100%;
-
-}
-.btnFinalizarReg:hover {
-    background-color:  #444; /* Un gris más claro */
 }
 
-#seccion-login {
-
-    display: none;
-}
-#seccion-reg {
-    
-    display: none;
-}
-
-#errorMsgLogin{
-    color: red;
-    margin-top: 10px;
-}
-
-
-#loginEmail{
-    border-color: rgb(227, 227, 225);
-    border-radius: 5px;
-    width: 100%;
-    outline: none;
-    margin: 3px;
-    height: 40px;
-}
-
-#loginEmail:focus{
-    outline: none;
-    background-color: #ffffff;
-    border-color: #86b7fe; /* Un azul muy claro */
-    /* Esta sombra es la que da el efecto 'suave' */
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); 
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-    border-radius: 5px;
-}
-
-#loginPass{
-
-    border-color: rgb(227, 227, 225);
-    border-radius: 5px;
-    width: 100%;
-    outline: none;
-    margin: 3px;
-    height: 40px;
-}
-
-#loginPass:focus{
-    outline: none;
-    background-color: #ffffff;
-    border-color: #86b7fe; /* Un azul muy claro */
-    /* Esta sombra es la que da el efecto 'suave' */
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); 
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-    border-radius: 5px;
-}
-
-/* :focus cambia el color del borde, efecto bombeo */
-#regNombre:focus, #regEmail:focus, #regIban:focus, #regTel:focus, #regPass:focus {
-    outline: none;
-    background-color: #ffffff;
-    border-color: #86b7fe; /* Un azul muy claro */
-    /* Esta sombra es la que da el efecto 'suave' */
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); 
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-    border-radius: 5px;
-
-}
-
-/*Mostrar mensajes error registro*/
-#errNombre, #errEmail, #errIban, #errTel, #errContrasena {
-    color: red;
-    margin-top: 10px;
-    /*display: none; Oculto por defecto, lo cambio por visibility: hidden; para que no me cambie el formato */
-    visibility: hidden;
-    
-}
-
-#regNombre, #regEmail, #regIban, #regTel, #regPass {
-    border-color: rgb(227, 227, 225);
-    border-radius: 5px;
-    width: 100%;
-    outline: none;
-    margin: 3px;
-    height: 40px;
-}
-
-/*
-footer estilo básico
-.bg-dark {
-    align-content: center;
-    text-align: center;
-    height: 100px;
-    width: 100%;
-    color: white !important;
-    background-color: #1e1d1d !important;
-}
-*/
-
-.bg-dark {
-    align-content: center;
-    text-align: center;
-    height: 100px;
-    width: 100%;
-    color: white !important;
-    background-color: #1e1d1d !important;
-}
-
-
-/* PRODUCTOS RECOMENDADOS */
-/* Esta es la "celda" de tu tabla */
-#prod-camas, #prod-higiene, #prod-juguetes, #prod-accesorios, #prod-comida {
-    display: flex;          /* Para centrar contenido interno */
-    flex-direction: column; /* Título arriba, imagen abajo */
-    align-items: center;    /* Centra horizontalmente */
-    width: 45%;            /* Casi la mitad para que quepan 2 por fila */
-    min-width: 300px;       /* Para que no se encojan demasiado */
-    border: 1px solid #ccc;
+/* Botones del carrusel */
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
     padding: 15px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.prev { left: 10px; }
+.next { right: 10px; }
+
+.prev:hover, .next:hover { background: rgba(0,0,0,0.8); }
+
+/* --- GRILLA DE PRODUCTOS --- */
+.prod-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    border: 1px solid #ddd;
+    padding: 50px;
     background-color: #fff;
-
-}
-#prod-camas:hover, #prod-higiene:hover, #prod-juguetes:hover, #prod-accesorios:hover, #prod-comida:hover {
-    border: 1px solid #777;
-}
-
-
-#prod-camas img {
-    width: 280px;           /* Ancho fijo deseado */
-    height: 200px;          /* Alto fijo deseado */
-    object-fit: cover;      /* Evita que se deformen */
-    margin-top: 40px;
-    margin-bottom: 20px;
-
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin-top: 30px;
 }
 
-
-#prod-higiene img {
-    width: 280px;           /* Ancho fijo deseado */
-    height: 200px;          /* Alto fijo deseado */
-    object-fit: cover;      /* Evita que se deformen */
-    margin-top: 40px;
+.prod-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border-color: #888;
 }
 
-#prod-juguetes img {
-    width: 280px;           /* Ancho fijo deseado */
-    height: 200px;          /* Alto fijo deseado */
-    object-fit: cover;      /* Evita que se deformen */
-    margin-top: 40px;
+.prod-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 15px;
 }
 
-#prod-accesorios img {
-    width: 280px;           /* Ancho fijo deseado */
-    height: 200px;          /* Alto fijo deseado */
-    object-fit: cover;      /* Evita que se deformen */
-    margin-top: 40px;
+.prod-item h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
 }
 
-#prod-comida img {
-    width: 280px;           /* Ancho fijo deseado */
-    height: 200px;          /* Alto fijo deseado */
-    object-fit: cover;      /* Evita que se deformen */
-    margin-top: 40px;
+/* --- FORMULARIOS --- */
+.estFormulario {
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    flex-direction: column;
 }
 
-
-#prod-camas img {
-    width: 280px;           /* Ancho fijo deseado */
-    height: 200px;          /* Alto fijo deseado */
-    object-fit: cover;      /* Evita que se deformen */
-    margin-top: 40px;
+.form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-#prod-camas img {
-    width: 280px;           /* Ancho fijo deseado */
-    height: 200px;          /* Alto fijo deseado */
-    object-fit: cover;      /* Evita que se deformen */
-    margin-top: 40px;
-}
-
-
-/* Acerca de la empresa */
-#seccion-acerca-de {
-    background-color: #f8f9fa;
-    padding: 20px;
-    margin: 40px 0;
-    border-radius: 5px;
-    display: none;
+/* --- VISTA ACERCA DE --- */
+.seccion-acerca-de {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    line-height: 1.6;
+    border-left: 5px solid #212529;
 }

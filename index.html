@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo Mascota - Tienda Online</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="plantilla/css/styles.css">
@@ -9,36 +10,44 @@
 </head>
 <body>
 
-    <!-- Barra de navegación, header-->
 <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.html" id="logo">
-                <img src="img/logo.jpg" alt="Logo Mundo Mascota" width="30" height="30" class="d-inline-block align-text-top">
-            Poner Logo
+            <a class="navbar-brand" href="#" @click.prevent="irAInicio">
+                <img src="img/logo.png" alt="Logo" id="logo" class="d-inline-block align-text-top">
             </a>
             
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto">
-                
-                    <li><a class="nav-link" href="index.html" id="btn-inicio">Inicio</a></li>
-
-                        <li><a class="nav-link" href="#" id="link-productos">Productos ▼</a>
-                            <ul id="lista-desplegable">
-                                <li><a class="item-categoria" href="#" data-id="prod-camas">Camas</a></li>
-                                <li><a class="item-categoria" href="#" data-id="prod-higiene">Higiene</a></li>
-                                <li><a class="item-categoria" href="#" data-id="prod-juguetes">Juguetes</a></li>
-                                <li><a class="item-categoria" href="#" data-id="prod-accesorios">Accesorios</a></li>
-                                <li><a class="item-categoria" href="#" data-id="prod-comida">Alimentación</a></li>                            
-                            </ul>
-                      </li>
-                    <li class="nav-item"><a class="nav-link" href="#" id="btn-acerca">Acerca de</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" @click.prevent="irAInicio">Inicio</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" @click.prevent="menuAbierto = !menuAbierto">Productos ▼</a>
+                        <ul id="lista-desplegable" v-show="menuAbierto">
+                            <li><a class="item-categoria" href="#" @click.prevent="seleccionarCategoria('prod-camas')">Camas</a></li>
+                            <li><a class="item-categoria" href="#" @click.prevent="seleccionarCategoria('prod-higiene-item')">Higiene</a></li>
+                            <li><a class="item-categoria" href="#" @click.prevent="seleccionarCategoria('prod-juguetes')">Juguetes</a></li>
+                            <li><a class="item-categoria" href="#" @click.prevent="seleccionarCategoria('prod-accesorios')">Accesorios</a></li>
+                            <li><a class="item-categoria" href="#" @click.prevent="seleccionarCategoria('prod-comida')">Alimentación</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" @click.prevent="vistaActual = 'acerca'">Acerca de</a>
+                    </li>
                 </ul>
 
                 <div class="d-flex align-items-center">
-                    <button class="btn btn-outline-light me-2" id="btn-carrito">🛒</button>
-                    <button class="btn btn-outline-light me-2" id="btn-login">👤</button>
-                    <select id="selector-idioma" class="form-select form-select-sm" style="width: auto;">
+                    <template v-if="usuario">
+                        <button class="btn btn-outline-light me-2" @click="vistaActual = 'carrito'">🛒 ({{carrito.length}})</button>
+                        <span class="text-white me-2">{{ usuario }}</span>
+                        <button class="btn btn-sm btn-outline-danger" @click="cerrarSesion">Salir</button>
+                    </template>
+                    <template v-else>
+                        <button class="btn btn-outline-light me-2" @click="vistaActual = 'auth'">👤 Entrar</button>
+                    </template>
+
+                    <select id="selector-idioma" class="form-select form-select-sm ms-2" style="width: auto;">
                         <option value="es">ES</option>
                         <option value="en">EN</option>
                     </select>
@@ -47,116 +56,138 @@
         </div>
     </nav>
 
-    <!-- Carrusel de imágenes, comienzo del body-->
-    <div class="carousel-container">
-        <div class="carousel-track">
-          <!-- Clon de la última <div class="slide"><img src="img/cama1.jpg" alt=""></div> -->
-          <!-- Slides reales -->
-           <!-- data-target indica a qué sección de productos se dirige al hacer clic en la imagen 
-           se mostrarán esos productos en la división principal, con target puedo saber 
-           en qué productos estoy haciendo clic 
-           -->
-          <div class="slide"><img id="cama1" src="img/cama1.jpg" alt="Cama1"></div>
-          <div class="slide"><img id="higiene1" src="img/higiene1.jpg" alt="Higiene1"></div>
-          <div class="slide"><img  id="accesorio1" src="img/accesorio1.jpg" alt="Accesorio1"></div> 
-          <div class="slide"><img id="comida1" src="img/comida1.jpg" alt="Comida1"></div> 
-          <div class="slide"><img  id="higiene2" src="img/higiene2.jpg" alt="Higiene2"></div>
-          <div class="slide"><img id="juguete2" src="img/juguete2.jpg" alt="Juguete2"></div>
-          <!-- Clon de la primera --
-           <div class="slide"><img src="https://www.cifpzonzamas.es/img/noticias/01KC8ZJRF3Q9B790FD0JAN7CTV.png" alt=""></div> -->
+    <div class="carousel-container" v-if="vistaActual === 'inicio' && catSeleccionada === 'all'">
+        <div class="carousel-track" :style="{ transform: `translateX(-${indexCarrusel * 100}%)`, transition: 'transform 0.5s ease-in-out' }">
+            <div class="slide" v-for="(img, i) in imagenesCarrusel" :key="i">
+                <img :src="img.src" :id="img.id" @click="verDetalleProducto(img.id)" style="cursor:pointer">
+            </div>
         </div>
-        <!--Botones para pasar las fotos manualmente-->
-        <button id="btn-prev" type="button" class="prev"><</button>
-        <button id="btn-next" type="button" class="next">></button>
-      </div>    
-      
+        <button class="prev" @click="anteriorCarrusel"><</button>
+        <button class="next" @click="siguienteCarrusel">></button>
+    </div>
 
-      <!-- DIVISIÓN PRINCIPAL-->
-    <hr class="solid"></hr>
-<main id="main-content" class="container my-5">
-        <div class="seccion-prod" id="seccion-prod">
-            <h1>Productos recomendados</h1>
-        </div>
-        <div id="prod-camas">
-            <h2>Camas para Mascotas</h2>
-            <img src="img/cama1.jpg" alt="Cama para Mascotas">
-        </div>
-        <div id="prod-higiene">
-            <h2>Higiene para Mascotas</h2>
-            <img src="img/higiene1.jpg" alt="Higiene para Mascotas">
-            <img src="img/higiene2.jpg" alt="Higiene para Mascotas">
-        </div>
-        <div id="prod-juguetes">
-            <h2>Juguetes para Mascotas</h2>
-            <img src="img/juguete2.jpg" alt="Juguete para Mascotas">
-        </div> 
-        <div id="prod-accesorios">
-            <h2>Accesorios para Mascotas</h2>
-            <img src="img/accesorio1.jpg" alt="Accesorio para Mascotas">
-        </div> 
-        <div id="prod-comida">
-            <h2>Comida para Mascotas</h2>
-            <img src="img/comida1.jpg" alt="Comida para Mascotas">
-        </div> 
-</main>
+    <hr class="solid" v-if="vistaActual === 'inicio'">
 
-    <!-- Autenticación en división principal -->
-        <div id="formulario-autenticacion" class="estFormulario">
-                <!-- Opciones del menú -->
-                <div id="seccion-menu"> 
-                    <button type="submit"  id="btn-cerrar" class="btn-cerrar">X</button>
-                    
-                    <button type="submit" id="btn-ir-login">Iniciar Sesión</button>
-                    <button type="submit" id="btn-ir-registro">Registrarse</button>
+    <main id="main-content" class="container my-5">
+        
+        <div v-if="vistaActual === 'inicio'">
+            <div class="seccion-prod">
+                <h1>{{ catSeleccionada === 'all' ? 'Productos Recomendados' : 'Categoría Seleccionada' }}</h1>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-center gap-4">
+                <div class="prod-item" v-show="catSeleccionada === 'all' || catSeleccionada === 'prod-camas'">
+                    <h2>Camas</h2>
+                    <img src="img/cama1.jpg" alt="Cama">
+                    <button @click="agregarAlCarrito({Nombre:'Cama Confort', precio: 35.0, imagen:'img/cama1.jpg'})" class="btn btn-dark btn-sm mt-2">Añadir 🛒</button>
                 </div>
-                <!-- Formulario Inicio Sesión -->
-                <div id="seccion-login">
-                    <h4>Iniciar Sesión</h4>
-                    <p id="errorMsgLogin"></p>
-                    <input type="email" id="loginEmail" placeholder="Correo electrónico" >
-                    <input type="password" id="loginPass" placeholder="Contraseña">
-                    <button type="submit" id="btnEntrar" class="btnEntrar">Entrar</button>
-                    <button type="submit" id="btnVolver" class="btn btn-link w-100 btn-volver">Volver</button>
+
+                <div class="prod-item prod-higiene-item" v-show="catSeleccionada === 'all' || catSeleccionada === 'prod-higiene-item'">
+                    <h2>Higiene 1</h2>
+                    <img src="img/higiene1.jpg" alt="Higiene">
+                    <button @click="agregarAlCarrito({Nombre:'Champú Perro', precio: 12.5, imagen:'img/higiene1.jpg'})" class="btn btn-dark btn-sm mt-2">Añadir 🛒</button>
                 </div>
-                <!-- Formulario Registro -->
-                <div id="seccion-reg">
-                    <h4>Registro de Usuario</h4>
-                    <input type="text" id="regNombre" placeholder="Nombre">
-                    <p id="errNombre">El nombre debe tener entre 2 y 50 caracteres.</p>
 
-                    <input type="email" id="regEmail" placeholder="Correo electrónico">
-                    <p id="errEmail">Formato de correo inválido.</p>
-
-                    <input type="text" id="regIban" placeholder="ES + 22 dígitos">
-                    <p id="errIban">El IBAN debe comenzar con 'ES' seguido de 22 dígitos.</p>
-
-                    <input type="text" id="regTel" placeholder="Teléfono">
-                    <p id="errTel">El teléfono debe tener 9 dígitos y comenzar con 6, 7, 8 o 9.</p>
-
-                    <input type="password" id="regPass" placeholder="Contraseña">
-                    <p id="errContrasena">La contraseña debe tener al menos 6 caracteres.</p>
-
-                    <p id="msgPantallaRegistro" style="font-weight: bold; margin-top: 10px;"></p>
-                    
-                    <button type="submit" id="btnFinalizarReg" class="btnFinalizarReg">Registrar</button>
-                    <button  type="submit" id="btnVolver" class="btn btn-link w-100 btn-volver">Volver</button>
+                <div class="prod-item prod-higiene-item" v-show="catSeleccionada === 'all' || catSeleccionada === 'prod-higiene-item'">
+                    <h2>Higiene 2</h2>
+                    <img src="img/higiene2.jpg" alt="Higiene">
+                    <button @click="agregarAlCarrito({Nombre:'Colonia Mascota', precio: 10.0, imagen:'img/higiene2.jpg'})" class="btn btn-dark btn-sm mt-2">Añadir 🛒</button>
                 </div>
+
+                <div class="prod-item" v-show="catSeleccionada === 'all' || catSeleccionada === 'prod-juguetes'">
+                    <h2>Juguetes</h2>
+                    <img src="img/juguete2.jpg" alt="Juguete">
+                    <button @click="agregarAlCarrito({Nombre:'Juguete Pelota', precio: 8.0, imagen:'img/juguete1.jpg'})" class="btn btn-dark btn-sm mt-2">Añadir 🛒</button>
+                </div>
+
+                <div class="prod-item" v-show="catSeleccionada === 'all' || catSeleccionada === 'prod-accesorios'">
+                    <h2>Accesorios</h2>
+                    <img src="img/accesorio1.jpg" alt="Accesorio">
+                    <button @click="agregarAlCarrito({Nombre:'Correa Ajustable', precio: 15.0, imagen:'img/accesorio1.jpg'})" class="btn btn-dark btn-sm mt-2">Añadir 🛒</button>
+                </div>
+
+                <div class="prod-item" v-show="catSeleccionada === 'all' || catSeleccionada === 'prod-comida'">
+                    <h2>Alimentación</h2>
+                    <img src="img/comida1.jpg" alt="Comida">
+                    <button @click="agregarAlCarrito({Nombre:'Comida Premium', precio: 25.0, imagen:'img/comida1.jpg'})" class="btn btn-dark btn-sm mt-2">Añadir 🛒</button>
+                </div>
+            </div>
         </div>
 
-        <!-- Acerca de la empresa -->
-        <div id="seccion-acerca-de">
+        <section v-if="vistaActual === 'detalle'" class="row">
+            <div class="col-md-6 text-center">
+                <img :src="productoSeleccionado.imagen" class="img-fluid rounded border">
+            </div>
+            <div class="col-md-6">
+                <h2>{{ productoSeleccionado.nombre }}</h2>
+                <p class="lead">{{ productoSeleccionado.descripcion }}</p>
+                <h3 class="text-success">{{ productoSeleccionado.precio }}€</h3>
+                <button class="btn btn-dark mt-3" @click="agregarAlCarrito(productoSeleccionado)">Añadir al carrito</button>
+                <button class="btn btn-outline-secondary mt-3 ms-2" @click="vistaActual = 'inicio'">Volver</button>
+            </div>
+        </section>
+
+        <section v-if="vistaActual === 'carrito'" class="col-12">
+            <h2>Tu Carrito 🛒</h2>
+            <div v-if="carrito.length === 0" class="alert alert-info">El carrito está vacío.</div>
+            <div v-else>
+                <table class="table align-middle">
+                    <thead>
+                        <tr><th>Producto</th><th>Precio</th><th>Cantidad</th><th>Subtotal</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in carrito" :key="index">
+                            <td>{{ item.Nombre }}</td>
+                            <td>{{ item.precio }}€</td>
+                            <td>{{ item.cantidad }}</td>
+                            <td>{{ (item.precio * item.cantidad).toFixed(2) }}€</td>
+                            <td><button class="btn btn-danger btn-sm" @click="eliminarDelCarrito(index)">Eliminar</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4 class="text-end">Total: {{ totalFactura }}€</h4>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-success btn-lg" @click="confirmarPedido">Confirmar Compra</button>
+                </div>
+            </div>
+        </section>
+
+        <div v-if="vistaActual === 'acerca'" class="seccion-acerca-de" style="display:block">
             <h3>Sobre Mundo Mascota</h3>
-            <p>
-                Mundo Mascota nació en 2024 con una misión clara: ofrecer a nuestros compañeros de cuatro patas 
-                solo lo mejor. Somos un equipo de amantes de los animales dedicados a seleccionar cuidadosamente 
-                cada cama, juguete y alimento que ves en nuestra web.
-            </p>
+            <p>Mundo Mascota nació en 2024 con una misión clara: ofrecer a nuestros compañeros de cuatro patas solo lo mejor.</p>
             <p><strong>Nuestros valores:</strong> Calidad, compromiso y amor por la biodiversidad.</p>
+            <button class="btn btn-dark" @click="vistaActual = 'inicio'">Volver al inicio</button>
         </div>
- 
 
-    <!-- Footer-->
-    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div v-if="vistaActual === 'auth'" class="estFormulario" style="display:flex">
+            <div v-if="authVista === 'menu'" class="text-center">
+                <button class="btn btn-dark mb-2 w-100" @click="authVista = 'login'">Iniciar Sesión</button>
+                <button class="btn btn-outline-dark w-100" @click="authVista = 'registro'">Registrarse</button>
+                <button class="btn btn-link mt-3" @click="vistaActual = 'inicio'">Cancelar</button>
+            </div>
+
+            <div v-if="authVista === 'login'" class="w-100 p-4 border rounded">
+                <h4>Iniciar Sesión</h4>
+                <p class="text-danger">{{ errorMsgLogin }}</p>
+                <input type="email" v-model="formLogin.email" class="form-control mb-2" placeholder="Email">
+                <input type="password" v-model="formLogin.pass" class="form-control mb-3" placeholder="Contraseña">
+                <button class="btn btn-dark w-100" @click="ejecutarLogin">Entrar</button>
+                <button class="btn btn-link w-100" @click="authVista = 'menu'">Volver</button>
+            </div>
+
+            <div v-if="authVista === 'registro'" class="w-100 p-4 border rounded">
+                <h4>Registro</h4>
+                <input type="text" v-model="formReg.nombre" class="form-control mb-2" placeholder="Nombre">
+                <input type="email" v-model="formReg.email" class="form-control mb-2" placeholder="Email">
+                <input type="text" v-model="formReg.iban" class="form-control mb-2" placeholder="IBAN (ES+22 dígitos)">
+                <input type="password" v-model="formReg.pass" class="form-control mb-3" placeholder="Contraseña">
+                <button class="btn btn-dark w-100" @click="ejecutarRegistro">Registrar</button>
+                <button class="btn btn-link w-100" @click="authVista = 'menu'">Volver</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-4">
         <p>&copy; 2024 Mundo Mascota S.L. | Calle Canina 123 | contacto@mascotas.es</p>
     </footer>
 </div>

@@ -1,242 +1,176 @@
-// -------------------- VARIABLES GLOBALES ---------------------
-const fotos = document.querySelectorAll('.slide');
-const menu = document.getElementById('lista-desplegable');
-const estFormulario = document.querySelector('.estFormulario');
-const seccionMenu = document.getElementById('seccion-menu');
-const seccionLogin = document.getElementById('seccion-login');
-const seccionReg = document.getElementById('seccion-reg');
-const mainContent = document.getElementById('main-content');
-const seccionAcercaDe = document.getElementById('seccion-acerca-de');
-const seccionProdTitulo = document.getElementById('seccion-prod');
+const { createApp } = Vue;
 
-let indice = 0; // contador carrusel
+createApp({
+    data() {
+        return {
+            // Control de Vistas
+            vistaActual: 'inicio',     // inicio, detalle, carrito, acerca, auth
+            authVista: 'menu',         // menu, login, registro
+            catSeleccionada: 'all',    // all, prod-camas, prod-higiene-item, etc.
+            menuAbierto: false,
+            
+            // Datos de Usuario y Sesión
+            usuario: sessionStorage.getItem('usuarioLogueado') || null,
+            carrito: JSON.parse(localStorage.getItem('carrito')) || [],
+            
+            // Carrusel
+            indexCarrusel: 0,
+            imagenesCarrusel: [
+                { id: 'juguete2', src: 'img/juguete2.jpg' },
+                { id: 'cama1', src: 'img/cama1.jpg' },
+                { id: 'higiene1', src: 'img/higiene1.jpg' },
+                { id: 'accesorio1', src: 'img/accesorio1.jpg' },
+                { id: 'comida1', src: 'img/comida1.jpg' }
+            ],
 
-// -------------------- FUNCIONES DE UTILIDAD (VISTAS) ---------------------
+            // Detalle de producto
+            productoSeleccionado: {},
 
-// Limpia la pantalla para que las secciones no se solapen
-function resetearPantalla() {
-    mainContent.style.display = 'block';           // Asegura que el contenedor de productos sea visible
-    estFormulario.style.display = 'none';          // Oculta el bloque de Login/Registro
-    seccionAcercaDe.style.display = 'none';        // Oculta Acerca de
-    seccionProdTitulo.style.display = 'block';     // Muestra el título "Productos Recomendados"
-    menu.style.display = 'none';                   // Cierra el menú desplegable siempre
-}
-
-function ocultarProductos() {
-    document.getElementById('prod-camas').style.display = 'none';
-    document.getElementById('prod-higiene').style.display = 'none';
-    document.getElementById('prod-juguetes').style.display = 'none';
-    document.getElementById('prod-accesorios').style.display = 'none';
-    document.getElementById('prod-comida').style.display = 'none';
-}
-
-// -------------------- CARRUSEL DE IMÁGENES ---------------------
-function mostrarFoto() {
-    fotos.forEach(foto => foto.classList.remove('activa'));
-    fotos[indice].classList.add('activa');
-}
-
-function siguiente() {
-    indice = (indice + 1) % fotos.length;
-    mostrarFoto();
-}
-
-function anterior() {
-    indice = (indice - 1 + fotos.length) % fotos.length;
-    mostrarFoto();
-}
-
-document.getElementById('btn-next').addEventListener('click', siguiente);
-document.getElementById('btn-prev').addEventListener('click', anterior);
-setInterval(siguiente, 3000); // Aumentado a 3s para mejor lectura
-mostrarFoto();
-
-// -------------------- MENÚ DESPLEGABLE ---------------------
-document.getElementById('link-productos').addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // Toggle: si está abierto se cierra, si está cerrado se abre
-    menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-});
-
-// Cerrar al clicar fuera
-document.addEventListener('click', (e) => {
-    if (!menu.contains(e.target) && e.target.id !== 'link-productos') {
-        menu.style.display = 'none';
-    }
-});
-
-// -------------------- NAVEGACIÓN CATEGORÍAS ---------------------
-document.querySelectorAll('.item-categoria').forEach(item => {
-    item.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        resetearPantalla(); // <-- Esto soluciona que el menú funcione tras el login
-        ocultarProductos();
-        
-        const categoriaId = item.getAttribute('data-id');
-        const target = document.getElementById(categoriaId);
-        if (target) target.style.display = 'block';
-    });
-});
-
-// -------------------- ACERCA DE ---------------------
-document.getElementById('btn-acerca').addEventListener('click', (e) => {
-    e.preventDefault();
-    resetearPantalla();
-    ocultarProductos();
-    seccionProdTitulo.style.display = 'none'; 
-    seccionAcercaDe.style.display = 'block';
-});
-
-// -------------------- LOGIN / REGISTRO (VISTAS) ---------------------
-document.getElementById("btn-login").addEventListener("click", e => {
-    e.preventDefault();
-    resetearPantalla(); // Limpiamos primero
-    mainContent.style.display = 'none'; // Luego ocultamos main para el login
-    estFormulario.style.display = 'flex';
-    cambiarVista('menu');
-});
-
-document.getElementById('btn-cerrar').addEventListener('click', e => {
-    e.preventDefault();
-    resetearPantalla();
-});
-
-function cambiarVista(vista) {
-    seccionMenu.style.display = 'none';
-    seccionLogin.style.display = 'none';
-    seccionReg.style.display = 'none';
-
-    if (vista === 'menu') seccionMenu.style.display = 'block';
-    if (vista === 'login') seccionLogin.style.display = 'block';
-    if (vista === 'registro') seccionReg.style.display = 'block';
-}
-
-document.getElementById("btn-ir-login").addEventListener('click', () => cambiarVista('login'));
-document.getElementById("btn-ir-registro").addEventListener('click', () => cambiarVista('registro'));
-
-document.querySelectorAll('.btn-volver').forEach(btn => {
-    btn.addEventListener('click', () => cambiarVista('menu'));
-});
-
-// -------------------- ACCIONES FORMULARIOS ---------------------
-document.getElementById('btnEntrar').addEventListener('click', enviarLogin);
-document.getElementById('btnFinalizarReg').addEventListener('click', enviarRegistro);
-
-async function enviarLogin() {
-    const inputEmail = document.getElementById('loginEmail');
-    const inputPass = document.getElementById('loginPass');
-    const errorMsg = document.getElementById('errorMsgLogin');
-    
-    const datosFormulario = new FormData(); 
-    datosFormulario.append('correo_electronico', inputEmail.value);
-    datosFormulario.append('contrasena', inputPass.value);
-
-    try {
-        const respuestaFetch = await fetch('bbdd/procesar_login.php', { method: 'POST', body: datosFormulario });
-        const texto = await respuestaFetch.text();
-
-        if (texto.includes("Bienvenido")) {
-            const nombreUsuario = texto.split(', ')[1].replace('!', ''); 
-            sessionStorage.setItem('usuarioLogueado', nombreUsuario);
-            location.reload();
-        } else {
-            inputEmail.style.border = "2px solid red";
-            inputPass.style.border = "2px solid red";
-            errorMsg.innerText = "Correo o contraseña incorrectos.";
+            // Formularios (v-model)
+            formLogin: { email: '', pass: '' },
+            errorMsgLogin: '',
+            formReg: { nombre: '', email: '', iban: '', tel: '', pass: '' }
         }
-    } catch (err) {
-        console.error("Error en login:", err);
-    }
-}
+    },
 
-async function enviarRegistro() {
-    const reglas = {
-        Nombre: /^[a-zA-Z\s]{2,50}$/,
-        Email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        Iban: /^ES\d{22}$/,
-        Tel: /^[6789]\d{8}$/,
-        Pass: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-    };
-    
-    const inEmail = document.getElementById('regEmail');
-    const inIban = document.getElementById('regIban');
-    const inTel = document.getElementById('regTel');
-    const inNombre = document.getElementById('regNombre');
-    const inPass = document.getElementById('regPass');
-    const pantallaMsg = document.getElementById('msgPantallaRegistro');
-
-    // Validación de vacíos
-    if (!inNombre.value || !inEmail.value || !inIban.value || !inTel.value || !inPass.value) {
-        pantallaMsg.style.color = "red";
-        pantallaMsg.innerText = "Todos los campos son obligatorios.";
-        return; 
-    }
-
-    // Validaciones RegEx (Simplificado)
-    let error = false;
-    const campos = [
-        { el: inNombre, reg: reglas.Nombre, err: 'errNombre' },
-        { el: inEmail, reg: reglas.Email, err: 'errEmail' },
-        { el: inIban, reg: reglas.Iban, err: 'errIban' },
-        { el: inTel, reg: reglas.Tel, err: 'errTel' },
-        { el: inPass, reg: reglas.Pass, err: 'errContrasena' }
-    ];
-
-    campos.forEach(campo => {
-        if (!campo.reg.test(campo.el.value)) {
-            campo.el.style.border = "2px solid red";
-            document.getElementById(campo.err).style.visibility = 'visible';
-            error = true;
-        } else {
-            campo.el.style.border = "1px solid rgb(227, 227, 225)";
-            document.getElementById(campo.err).style.visibility = 'hidden';
+    computed: {
+        totalFactura() {
+            return this.carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0).toFixed(2);
         }
-    });
+    },
 
-    if (error) return;
+    methods: {
+        // --- NAVEGACIÓN ---
+        irAInicio() {
+            this.vistaActual = 'inicio';
+            this.catSeleccionada = 'all';
+            this.menuAbierto = false;
+        },
 
-    const datosFormulario = new FormData();
-    datosFormulario.append('nombre', inNombre.value);
-    datosFormulario.append('correo_electronico', inEmail.value);
-    datosFormulario.append('cuenta_bancaria', inIban.value);
-    datosFormulario.append('telefono', inTel.value);
-    datosFormulario.append('contrasena', inPass.value);
+        seleccionarCategoria(cat) {
+            this.catSeleccionada = cat;
+            this.vistaActual = 'inicio';
+            this.menuAbierto = false;
+        },
 
-    const res = await fetch('bbdd/procesar_registro.php', { method: 'POST', body: datosFormulario });
-    const data = await res.text();
-    
-    if (data.trim().toLowerCase().includes("exitoso")) {
-        pantallaMsg.style.color = "green";
-        pantallaMsg.innerText = "¡Bienvenido! Registro completado.";
-        setTimeout(() => { location.reload(); }, 2000);
-    } else {
-        pantallaMsg.style.color = "#e62222";
-        pantallaMsg.innerText = data;
-    }
-}
+        // --- CARRUSEL ---
+        siguienteCarrusel() {
+            this.indexCarrusel = (this.indexCarrusel + 1) % this.imagenesCarrusel.length;
+        },
+        anteriorCarrusel() {
+            this.indexCarrusel = (this.indexCarrusel - 1 + this.imagenesCarrusel.length) % this.imagenesCarrusel.length;
+        },
 
-// -------------------- SESIÓN DE USUARIO ---------------------
-function comprobarSesionStorage() {
-    const nombre = sessionStorage.getItem('usuarioLogueado');
-    if (nombre) {
-        const btnLogin = document.getElementById('btn-login');
-        btnLogin.parentElement.innerHTML = `
-            <button class="btn btn-outline-light me-2" id="btn-carrito">🛒</button>
-            <span class="text-white me-2">${nombre}</span>
-            <button class="btn btn-sm btn-outline-danger" id="btn-logout">Salir</button>
-            <select id="selector-idioma" class="form-select form-select-sm ms-2" style="width: auto;">
-                <option value="es">ES</option>
-                <option value="en">EN</option>
-            </select>
-        `;
+        // --- LÓGICA DE PRODUCTOS (AJAX) ---
+        async verDetalleProducto(idImg) {
+            try {
+                // El mismo PHP que ya tenías funciona perfecto aquí
+                const response = await fetch(`bbdd/get_producto.php?id_img=${idImg}`);
+                const data = await response.json();
+                if (!data.error) {
+                    this.productoSeleccionado = data;
+                    this.vistaActual = 'detalle';
+                }
+            } catch (error) {
+                console.error("Error al obtener detalle:", error);
+            }
+        },
 
-        document.getElementById('btn-logout').addEventListener('click', () => {
+        // --- CARRITO ---
+        agregarAlCarrito(prod) {
+            if (!this.usuario) {
+                alert("Debes iniciar sesión para comprar.");
+                this.vistaActual = 'auth';
+                this.authVista = 'login';
+                return;
+            }
+            const itemEnCarrito = this.carrito.find(item => item.Nombre === (prod.Nombre || prod.nombre));
+            if (itemEnCarrito) {
+                itemEnCarrito.cantidad++;
+            } else {
+                this.carrito.push({
+                    Nombre: prod.Nombre || prod.nombre,
+                    precio: parseFloat(prod.precio),
+                    imagen: prod.imagen,
+                    cantidad: 1
+                });
+            }
+            this.guardarCarrito();
+        },
+
+        eliminarDelCarrito(index) {
+            this.carrito.splice(index, 1);
+            this.guardarCarrito();
+        },
+
+        guardarCarrito() {
+            localStorage.setItem('carrito', JSON.stringify(this.carrito));
+        },
+
+        confirmarPedido() {
+            alert("¡Pedido realizado con éxito!");
+            this.carrito = [];
+            this.guardarCarrito();
+            this.irAInicio();
+        },
+
+        // --- AUTENTICACIÓN (Llamadas a tus PHP actuales) ---
+        async ejecutarLogin() {
+            const formData = new FormData();
+            formData.append('correo_electronico', this.formLogin.email);
+            formData.append('contrasena', this.formLogin.pass);
+
+            try {
+                const res = await fetch('bbdd/procesar_login.php', { method: 'POST', body: formData });
+                const texto = await res.text();
+
+                if (texto.includes("Bienvenido")) {
+                    const nombre = texto.split(', ')[1].replace('!', '').trim();
+                    sessionStorage.setItem('usuarioLogueado', nombre);
+                    this.usuario = nombre;
+                    this.vistaActual = 'inicio';
+                    location.reload(); // Recarga para limpiar estados
+                } else {
+                    this.errorMsgLogin = "Credenciales incorrectas.";
+                }
+            } catch (e) {
+                this.errorMsgLogin = "Error de conexión con el servidor.";
+            }
+        },
+
+        // Dentro de methods en tu script.js, asegúrate de que esté así:
+        async ejecutarRegistro() {
+            const formData = new FormData();
+            formData.append('nombre', this.formReg.nombre);
+            formData.append('correo_electronico', this.formReg.email);
+            formData.append('cuenta_bancaria', this.formReg.iban);
+            formData.append('telefono', this.formReg.tel); // <--- Asegúrate de enviar el teléfono
+            formData.append('contrasena', this.formReg.pass);
+
+            try {
+                const res = await fetch('bbdd/procesar_registro.php', { method: 'POST', body: formData });
+                const data = await res.text();
+                
+                if (data.trim().toLowerCase().includes("exitoso")) {
+                    alert("¡Registro completado! Ahora puedes iniciar sesión.");
+                    this.authVista = 'login';
+                } else {
+                    alert(data); // Muestra el error que devuelve el PHP (ej: "Este email ya existe")
+                }
+            } catch (e) {
+                console.error("Error en el registro:", e);
+            }
+        },
+
+        cerrarSesion() {
             sessionStorage.removeItem('usuarioLogueado');
+            this.usuario = null;
             location.reload();
-        });
-    }
-}
+        }
+    },
 
-comprobarSesionStorage();
+    mounted() {
+        // Iniciar autoplay del carrusel
+        setInterval(this.siguienteCarrusel, 4000);
+    }
+}).mount('#app');
