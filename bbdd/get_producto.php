@@ -2,17 +2,16 @@
 header('Content-Type: application/json');
 
 $servername = "localhost";
-$username = "zonzamas"; //nerea, zonzamas
-$password = "Csas1234!";  //nerea, Csas1234!
+$username = "nerea"; //nerea, zonzamas
+$password = "nerea";  //nerea, Csas1234!
 $dbname = "mascotas";
 
 
 try {
     $conexion = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    
-    // Obtenemos el ID de la imagen que viene del carrusel
     $img_id = $_GET['id_img'] ?? '';
 
+    // Buscamos la fila donde la ruta de la imagen contenga el ID del carrusel
     $stmt = $conexion->prepare("SELECT * FROM productos WHERE imagen LIKE :img LIMIT 1");
     $stmt->execute(['img' => "%$img_id%"]);
     $producto = $stmt->fetch(PDO::FETCH_ASSOC);

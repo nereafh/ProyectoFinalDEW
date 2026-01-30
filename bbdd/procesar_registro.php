@@ -6,8 +6,8 @@ error_reporting(E_ALL);
 */
 
 $servername = "localhost";
-$username = "zonzamas"; 
-$password = "Csas1234!"; 
+$username = "nerea"; //nerea, zonzamas
+$password = "nerea"; //nerea, Csas1234!
 $dbname = "mascotas";
 
 // Establecemos la conexión

@@ -3,17 +3,14 @@ const { createApp } = Vue;
 createApp({
     data() {
         return {
-            // Control de Vistas
-            vistaActual: 'inicio',     // inicio, detalle, carrito, acerca, auth
-            authVista: 'menu',         // menu, login, registro
-            catSeleccionada: 'all',    // all, prod-camas, prod-higiene-item, etc.
+            idioma: 'es',
+            textos: traducciones,
+            vistaActual: 'inicio',
+            authVista: 'menu',
+            catSeleccionada: 'all',
             menuAbierto: false,
-            
-            // Datos de Usuario y Sesión
             usuario: sessionStorage.getItem('usuarioLogueado') || null,
             carrito: JSON.parse(localStorage.getItem('carrito')) || [],
-            
-            // Carrusel
             indexCarrusel: 0,
             imagenesCarrusel: [
                 { id: 'juguete2', src: 'img/juguete2.jpg' },
@@ -22,14 +19,21 @@ createApp({
                 { id: 'accesorio1', src: 'img/accesorio1.jpg' },
                 { id: 'comida1', src: 'img/comida1.jpg' }
             ],
-
-            // Detalle de producto
             productoSeleccionado: {},
-
-            // Formularios (v-model)
             formLogin: { email: '', pass: '' },
-            errorMsgLogin: '',
-            formReg: { nombre: '', email: '', iban: '', tel: '', pass: '' }
+            formReg: { nombre: '', email: '', iban: '', tel: '', pass: '' },
+            
+            // --- NUEVO: Objeto para mensajes de error ---
+            errores: {
+                login: '',
+                regNombre: '',
+                regEmail: '',
+                regIban: '',
+                regTel: '',
+                regPass: '',
+                regGlobal: '',
+                compra: ''
+            }
         }
     },
 
@@ -40,82 +44,56 @@ createApp({
     },
 
     methods: {
-        // --- NAVEGACIÓN ---
-        irAInicio() {
-            this.vistaActual = 'inicio';
-            this.catSeleccionada = 'all';
-            this.menuAbierto = false;
-        },
+        irAInicio() { this.vistaActual = 'inicio'; this.catSeleccionada = 'all'; this.menuAbierto = false; },
+        seleccionarCategoria(cat) { this.catSeleccionada = cat; this.vistaActual = 'inicio'; this.menuAbierto = false; },
+        siguienteCarrusel() { this.indexCarrusel = (this.indexCarrusel + 1) % this.imagenesCarrusel.length; },
+        anteriorCarrusel() { this.indexCarrusel = (this.indexCarrusel - 1 + this.imagenesCarrusel.length) % this.imagenesCarrusel.length; },
 
-        seleccionarCategoria(cat) {
-            this.catSeleccionada = cat;
-            this.vistaActual = 'inicio';
-            this.menuAbierto = false;
-        },
-
-        // --- CARRUSEL ---
-        siguienteCarrusel() {
-            this.indexCarrusel = (this.indexCarrusel + 1) % this.imagenesCarrusel.length;
-        },
-        anteriorCarrusel() {
-            this.indexCarrusel = (this.indexCarrusel - 1 + this.imagenesCarrusel.length) % this.imagenesCarrusel.length;
-        },
-
-        // --- LÓGICA DE PRODUCTOS (AJAX) ---
-        async verDetalleProducto(idImg) {
+                async verDetalleProducto(idImg) {
             try {
-                // El mismo PHP que ya tenías funciona perfecto aquí
+                // Hacemos la petición al PHP usando el ID de la imagen
                 const response = await fetch(`bbdd/get_producto.php?id_img=${idImg}`);
                 const data = await response.json();
+                
                 if (!data.error) {
+                    // Guardamos los datos recibidos en el objeto que usa la vista de detalle
                     this.productoSeleccionado = data;
+                    // Cambiamos la vista
                     this.vistaActual = 'detalle';
+                    // Scroll arriba para que el usuario vea el producto
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                } else {
+                    console.error("Producto no encontrado en la base de datos");
                 }
             } catch (error) {
-                console.error("Error al obtener detalle:", error);
+                console.error("Error al conectar con el servidor:", error);
             }
         },
 
-        // --- CARRITO ---
-        agregarAlCarrito(prod) {
-            if (!this.usuario) {
-                alert("Debes iniciar sesión para comprar.");
-                this.vistaActual = 'auth';
-                this.authVista = 'login';
-                return;
-            }
-            const itemEnCarrito = this.carrito.find(item => item.Nombre === (prod.Nombre || prod.nombre));
-            if (itemEnCarrito) {
-                itemEnCarrito.cantidad++;
-            } else {
-                this.carrito.push({
-                    Nombre: prod.Nombre || prod.nombre,
-                    precio: parseFloat(prod.precio),
-                    imagen: prod.imagen,
-                    cantidad: 1
-                });
-            }
-            this.guardarCarrito();
+        // --- LÓGICA DE VALIDACIÓN (JS PURO) ---
+        validarRegistro() {
+            let esValido = true;
+            // Reset de errores
+            Object.keys(this.errores).forEach(key => this.errores[key] = '');
+
+            const regexNombre = /^[a-zA-Z\s]{2,50}$/;
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const regexIban = /^ES\d{22}$/;
+            const regexTel = /^[6789]\d{8}$/;
+            const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+            // Usamos las variables de lang.js
+            if (!regexNombre.test(this.formReg.nombre)) { this.errores.regNombre = this.textos[this.idioma].mensajes.vNombre; esValido = false; }
+            if (!regexEmail.test(this.formReg.email)) { this.errores.regEmail = this.textos[this.idioma].mensajes.vEmail; esValido = false; }
+            if (!regexIban.test(this.formReg.iban)) { this.errores.regIban = this.textos[this.idioma].mensajes.vIban; esValido = false; }
+            if (!regexTel.test(this.formReg.tel)) { this.errores.regTel = this.textos[this.idioma].mensajes.vTel; esValido = false; }
+            if (!regexPass.test(this.formReg.pass)) { this.errores.regPass = this.textos[this.idioma].mensajes.vPass; esValido = false; }
+
+            return esValido;
         },
 
-        eliminarDelCarrito(index) {
-            this.carrito.splice(index, 1);
-            this.guardarCarrito();
-        },
-
-        guardarCarrito() {
-            localStorage.setItem('carrito', JSON.stringify(this.carrito));
-        },
-
-        confirmarPedido() {
-            alert("¡Pedido realizado con éxito!");
-            this.carrito = [];
-            this.guardarCarrito();
-            this.irAInicio();
-        },
-
-        // --- AUTENTICACIÓN (Llamadas a tus PHP actuales) ---
         async ejecutarLogin() {
+            this.errores.login = '';
             const formData = new FormData();
             formData.append('correo_electronico', this.formLogin.email);
             formData.append('contrasena', this.formLogin.pass);
@@ -123,54 +101,63 @@ createApp({
             try {
                 const res = await fetch('bbdd/procesar_login.php', { method: 'POST', body: formData });
                 const texto = await res.text();
-
                 if (texto.includes("Bienvenido")) {
                     const nombre = texto.split(', ')[1].replace('!', '').trim();
                     sessionStorage.setItem('usuarioLogueado', nombre);
-                    this.usuario = nombre;
-                    this.vistaActual = 'inicio';
-                    location.reload(); // Recarga para limpiar estados
+                    location.reload();
                 } else {
-                    this.errorMsgLogin = "Credenciales incorrectas.";
+                    this.errores.login = this.textos[this.idioma].mensajes.loginErr;                
                 }
-            } catch (e) {
-                this.errorMsgLogin = "Error de conexión con el servidor.";
-            }
+            } catch (e) { this.errores.login = "Error de servidor."; }
         },
 
-        // Dentro de methods en tu script.js, asegúrate de que esté así:
         async ejecutarRegistro() {
+            if (!this.validarRegistro()) return;
+
             const formData = new FormData();
             formData.append('nombre', this.formReg.nombre);
             formData.append('correo_electronico', this.formReg.email);
             formData.append('cuenta_bancaria', this.formReg.iban);
-            formData.append('telefono', this.formReg.tel); // <--- Asegúrate de enviar el teléfono
+            formData.append('telefono', this.formReg.tel);
             formData.append('contrasena', this.formReg.pass);
 
             try {
                 const res = await fetch('bbdd/procesar_registro.php', { method: 'POST', body: formData });
                 const data = await res.text();
-                
-                if (data.trim().toLowerCase().includes("exitoso")) {
-                    alert("¡Registro completado! Ahora puedes iniciar sesión.");
+                if (data.toLowerCase().includes("exitoso")) {
                     this.authVista = 'login';
+                    this.errores.login = this.textos[this.idioma].mensajes.regExito;
                 } else {
-                    alert(data); // Muestra el error que devuelve el PHP (ej: "Este email ya existe")
+                    this.errores.regGlobal = data;
                 }
-            } catch (e) {
-                console.error("Error en el registro:", e);
-            }
+            } catch (e) { this.errores.regGlobal = "Error al conectar."; }
         },
 
-        cerrarSesion() {
-            sessionStorage.removeItem('usuarioLogueado');
-            this.usuario = null;
-            location.reload();
-        }
+        agregarAlCarrito(prod) {
+            if (!this.usuario) {
+                this.vistaActual = 'auth';
+                this.authVista = 'login';
+                this.errores.login = this.textos[this.idioma].mensajes.loginComprar;
+                return;
+            }
+            const item = this.carrito.find(i => i.nombre === (prod.nombre || prod.nombre));
+            if (item) item.cantidad++;
+            else this.carrito.push({ nombre: prod.nombre || prod.nombre, precio: parseFloat(prod.precio), imagen: prod.imagen, cantidad: 1 });
+            this.guardarCarrito();
+        },
+
+        eliminarDelCarrito(index) { this.carrito.splice(index, 1); this.guardarCarrito(); },
+        guardarCarrito() { localStorage.setItem('carrito', JSON.stringify(this.carrito)); },
+        
+        confirmarPedido() { 
+            this.errores.compra = this.textos[this.idioma].mensajes.compraExito;
+            setTimeout(() => { this.carrito = []; 
+                this.guardarCarrito(); this.irAInicio(); 
+                this.errores.compra = ''; }, 2000); 
+            },
+        
+            cerrarSesion() { sessionStorage.removeItem('usuarioLogueado'); location.reload(); }
     },
 
-    mounted() {
-        // Iniciar autoplay del carrusel
-        setInterval(this.siguienteCarrusel, 4000);
-    }
+    mounted() { setInterval(this.siguienteCarrusel, 4000); }
 }).mount('#app');
