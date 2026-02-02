@@ -4,13 +4,16 @@ createApp({
     data() {
         return {
             idioma: 'es',
-            textos: traducciones,
-            vistaActual: 'inicio',
-            authVista: 'menu',
+            textos: traducciones, // lang.js 
+            vistaActual: 'inicio', // controla qué sección se ve y cual no (v-if)
+            authVista: 'menu', // controla qué formulario se ve, login o registro
             catSeleccionada: 'all',
             menuAbierto: false,
-            usuario: sessionStorage.getItem('usuarioLogueado') || null,
+
+            usuario: sessionStorage.getItem('usuarioLogueado') || null, // los datos permaneceran durante la sesión 
             carrito: JSON.parse(localStorage.getItem('carrito')) || [],
+
+            // ------------------- CARRUSEL --------------------------
             indexCarrusel: 0,
             imagenesCarrusel: [
                 { id: 'juguete2', src: 'img/juguete2.jpg' },
@@ -19,11 +22,19 @@ createApp({
                 { id: 'accesorio1', src: 'img/accesorio1.jpg' },
                 { id: 'comida1', src: 'img/comida1.jpg' }
             ],
+            /*
+            Al hacer clic en un productos del carrusel Vue llena el objeto con la información de ese 
+            producto específico para luego mostrarlo
+            */
             productoSeleccionado: {},
-            formLogin: { email: '', pass: '' },
-            formReg: { nombre: '', email: '', iban: '', tel: '', pass: '' },
+            formLogin: { // al igual que con el anterior, recogen lo que escribe el usuario en los inputs (formLogin.email)
+                email: '', pass: '' 
+            },
+            formReg: { 
+                nombre: '', email: '', iban: '', tel: '', pass: '' 
+            },
             
-            // --- NUEVO: Objeto para mensajes de error ---
+            // --- Gestión de errores formulario. Objeto para mensajes de error ---
             errores: {
                 login: '',
                 regNombre: '',
@@ -37,6 +48,7 @@ createApp({
         }
     },
 
+    // Suma total de dinero o resta según se aumenten productos o se quiten
     computed: {
         totalFactura() {
             return this.carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0).toFixed(2);
@@ -44,21 +56,33 @@ createApp({
     },
 
     methods: {
-        irAInicio() { this.vistaActual = 'inicio'; this.catSeleccionada = 'all'; this.menuAbierto = false; },
-        seleccionarCategoria(cat) { this.catSeleccionada = cat; this.vistaActual = 'inicio'; this.menuAbierto = false; },
-        siguienteCarrusel() { this.indexCarrusel = (this.indexCarrusel + 1) % this.imagenesCarrusel.length; },
-        anteriorCarrusel() { this.indexCarrusel = (this.indexCarrusel - 1 + this.imagenesCarrusel.length) % this.imagenesCarrusel.length; },
+        // Navegación
+        irAInicio() { 
+            this.vistaActual = 'inicio'; this.catSeleccionada = 'all'; this.menuAbierto = false; 
+        },
+        seleccionarCategoria(cat) { 
+            this.catSeleccionada = cat; this.vistaActual = 'inicio'; this.menuAbierto = false; 
+        },
 
-                async verDetalleProducto(idImg) {
+        // Carrusel
+        siguienteCarrusel() { 
+            this.indexCarrusel = (this.indexCarrusel + 1) % this.imagenesCarrusel.length; 
+        },
+        anteriorCarrusel() { 
+            this.indexCarrusel = (this.indexCarrusel - 1 + this.imagenesCarrusel.length) % this.imagenesCarrusel.length; 
+        },
+
+        // AJAX. Obtener producto del carrusel
+        async verDetalleProducto(idImg) {
             try {
-                // Hacemos la petición al PHP usando el ID de la imagen
+                // Hace la petición al PHP usando el ID de la imagen
                 const response = await fetch(`bbdd/get_producto.php?id_img=${idImg}`);
                 const data = await response.json();
                 
                 if (!data.error) {
-                    // Guardamos los datos recibidos en el objeto que usa la vista de detalle
+                    // Guarda los datos recibidos en el objeto que usa la vista de detalle
                     this.productoSeleccionado = data;
-                    // Cambiamos la vista
+                    // Cambia la vista
                     this.vistaActual = 'detalle';
                     // Scroll arriba para que el usuario vea el producto
                     window.scrollTo({top: 0, behavior: 'smooth'});
@@ -70,7 +94,7 @@ createApp({
             }
         },
 
-        // --- LÓGICA DE VALIDACIÓN (JS PURO) ---
+        // --- VALIDACIÓN FORMULARIO ---
         validarRegistro() {
             let esValido = true;
             // Reset de errores
@@ -82,16 +106,27 @@ createApp({
             const regexTel = /^[6789]\d{8}$/;
             const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-            // Usamos las variables de lang.js
-            if (!regexNombre.test(this.formReg.nombre)) { this.errores.regNombre = this.textos[this.idioma].mensajes.vNombre; esValido = false; }
-            if (!regexEmail.test(this.formReg.email)) { this.errores.regEmail = this.textos[this.idioma].mensajes.vEmail; esValido = false; }
-            if (!regexIban.test(this.formReg.iban)) { this.errores.regIban = this.textos[this.idioma].mensajes.vIban; esValido = false; }
-            if (!regexTel.test(this.formReg.tel)) { this.errores.regTel = this.textos[this.idioma].mensajes.vTel; esValido = false; }
-            if (!regexPass.test(this.formReg.pass)) { this.errores.regPass = this.textos[this.idioma].mensajes.vPass; esValido = false; }
+            // Variables de lang.js
+            if (!regexNombre.test(this.formReg.nombre)) { 
+                this.errores.regNombre = this.textos[this.idioma].mensajes.vNombre; esValido = false; 
+            }
+            if (!regexEmail.test(this.formReg.email)) { 
+                this.errores.regEmail = this.textos[this.idioma].mensajes.vEmail; esValido = false; 
+            }
+            if (!regexIban.test(this.formReg.iban)) { 
+                this.errores.regIban = this.textos[this.idioma].mensajes.vIban; esValido = false; 
+            }
+            if (!regexTel.test(this.formReg.tel)) { 
+                this.errores.regTel = this.textos[this.idioma].mensajes.vTel; esValido = false; 
+            }
+            if (!regexPass.test(this.formReg.pass)) { 
+                this.errores.regPass = this.textos[this.idioma].mensajes.vPass; esValido = false; 
+            }
 
             return esValido;
         },
 
+        // AJAX login
         async ejecutarLogin() {
             this.errores.login = '';
             const formData = new FormData();
@@ -111,6 +146,7 @@ createApp({
             } catch (e) { this.errores.login = "Error de servidor."; }
         },
 
+        // AJAX registro
         async ejecutarRegistro() {
             if (!this.validarRegistro()) return;
 
@@ -133,6 +169,7 @@ createApp({
             } catch (e) { this.errores.regGlobal = "Error al conectar."; }
         },
 
+        // Si no está logueado el usuario, le obliga a ir al login, sino no puede agregar productos  
         agregarAlCarrito(prod) {
             if (!this.usuario) {
                 this.vistaActual = 'auth';
@@ -142,22 +179,34 @@ createApp({
             }
             const item = this.carrito.find(i => i.nombre === (prod.nombre || prod.nombre));
             if (item) item.cantidad++;
-            else this.carrito.push({ nombre: prod.nombre || prod.nombre, precio: parseFloat(prod.precio), imagen: prod.imagen, cantidad: 1 });
+            else this.carrito.push({ 
+                nombre: prod.nombre || prod.nombre, precio: parseFloat(prod.precio), imagen: prod.imagen, cantidad: 1 
+            });
             this.guardarCarrito();
         },
 
-        eliminarDelCarrito(index) { this.carrito.splice(index, 1); this.guardarCarrito(); },
-        guardarCarrito() { localStorage.setItem('carrito', JSON.stringify(this.carrito)); },
+        eliminarDelCarrito(index) { 
+            this.carrito.splice(index, 1); this.guardarCarrito(); 
+        },
+        guardarCarrito() { 
+            localStorage.setItem('carrito', JSON.stringify(this.carrito)); // aunque se cierre la sesión permanecen los cambios
+        },
         
         confirmarPedido() { 
             this.errores.compra = this.textos[this.idioma].mensajes.compraExito;
-            setTimeout(() => { this.carrito = []; 
+            setTimeout(() => { 
+                this.carrito = []; 
                 this.guardarCarrito(); this.irAInicio(); 
-                this.errores.compra = ''; }, 2000); 
+                this.errores.compra = ''; 
+            }, 2000); 
             },
         
-            cerrarSesion() { sessionStorage.removeItem('usuarioLogueado'); location.reload(); }
+            // Se cierra la sesión pero permanecen los objetos del carrito si no se eliminaron antes
+            cerrarSesion() { 
+                sessionStorage.removeItem('usuarioLogueado'); location.reload(); 
+            }
     },
 
-    mounted() { setInterval(this.siguienteCarrusel, 4000); }
+    // Al cargar la página inicia el movimiento del carrusel cada 3 segundos
+    mounted() { setInterval(this.siguienteCarrusel, 3000); }
 }).mount('#app');

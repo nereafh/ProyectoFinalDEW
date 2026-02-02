@@ -1,7 +1,9 @@
 <?php
+// conexión con la base de datos 
+
 $host = 'localhost'; 
-$usuario = 'nerea'; //nerea, zonzamas   
-$contrasena = 'nerea'; //nerea, Csas1234!   
+$usuario = 'zonzamas'; //nerea, zonzamas   
+$contrasena = 'Csas1234!'; //nerea, Csas1234!   
 $base_de_datos = 'mascotas';  
 
 try {

@@ -11,6 +11,7 @@
 <body>
 
 <div id="app">
+    <!--navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="#" @click.prevent="irAInicio">
@@ -56,9 +57,10 @@
         </div>
     </nav>
 
+    <!-- carrusel -->
     <div class="carousel-container">
         <div class="carousel-track" :style="{ transform: `translateX(-${indexCarrusel * 100}%)`, transition: 'transform 0.5s ease-in-out' }">
-            <div class="slide" v-for="(img, i) in imagenesCarrusel" :key="i">
+            <div class="slide" v-for="(img, i) in imagenesCarrusel" :key="i"> <!-- cada imagen del carrusel -->
                 <img :src="img.src" :id="img.id" @click="verDetalleProducto(img.id)" style="cursor:pointer">
             </div>
         </div>
@@ -68,10 +70,12 @@
 
     <hr class="solid">
 
+    <!-- contenido principal -->
     <main id="main-content" class="container my-5">
         
         <div v-if="vistaActual === 'inicio'">
             <div class="seccion-prod">
+               <!-- si está en all no hay categorias (prod-camas..) seleccionadas, si es verdadero muestra productos recomendados sino la categoría seleccionada--> 
                 <h1>{{ catSeleccionada === 'all' ? 'Productos Recomendados' : 'Categoría Seleccionada' }}</h1>
             </div>
 
@@ -166,6 +170,7 @@
             <button class="btn btn-dark" @click="vistaActual = 'inicio'">{{ textos[idioma].volver }}</button>
         </div>
 
+        <!-- vista autenticación -->
         <div v-if="vistaActual === 'auth'" class="estFormulario" style="display:flex">
             <div v-if="authVista === 'menu'" class="text-center">
                 <button class="btn btn-dark mb-2 w-100" @click="authVista = 'login'">{{ textos[idioma].auth.loginTit }}</button>
@@ -217,6 +222,7 @@
         </div>
     </main>
 
+    <!-- footer -->
     <footer class="bg-dark text-white text-center py-4">
         <p>&copy; 2024 Mundo Mascota S.L. | Calle Canina 123 | contacto@mascotas.es</p>
     </footer>

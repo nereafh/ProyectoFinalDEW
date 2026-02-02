@@ -1,12 +1,12 @@
-/* --- RESET Y GENERAL --- */
+/* --- Logo --- */
 #logo {
     width: 85px;
     height: 85px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease; /* Suaviza el cambio de tamaño */
 }
 
 #logo:hover {
-    transform: scale(1.05);
+    transform: scale(1.05); /* Efecto de aumento al pasar el ratón */
 }
 
 body {
@@ -18,7 +18,7 @@ hr.solid {
     margin: 20px 0;
 }
 
-/* --- BARRA DE NAVEGACIÓN Y DROPDOWN --- */
+/* --- Menú desplegable --- */
 #lista-desplegable {
     position: absolute;
     top: 100%;
@@ -27,7 +27,7 @@ hr.solid {
     border-radius: 5px;
     padding: 10px 0;
     min-width: 180px;
-    z-index: 1050;
+    z-index: 1050; /* Por encima de otros elementos */
     list-style: none;
     box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
 }
@@ -45,12 +45,12 @@ hr.solid {
     color: #ffd700 !important;
 }
 
-/* --- CARRUSEL REACTIVO --- */
+/* --- Carrusel --- */
 .carousel-container {
     width: 100%;
     max-width: 700px;
     margin: 30px auto;
-    overflow: hidden;
+    overflow: hidden; /* Oculta las imágenes que no están en el centro */
     position: relative;
     border-radius: 10px;
     background: white;
@@ -59,7 +59,7 @@ hr.solid {
 
 .carousel-track {
     display: flex;
-    /* La transición ahora se maneja desde el JS/Vue dinámicamente */
+    /* La transición se maneja desde el JS/Vue */
 }
 
 .slide {
@@ -93,12 +93,18 @@ hr.solid {
     font-weight: bold;
 }
 
-.prev { left: 10px; }
-.next { right: 10px; }
+.prev { 
+    left: 10px;
+ }
+.next { 
+    right: 10px;
+ }
 
-.prev:hover, .next:hover { background: rgba(0,0,0,0.8); }
+.prev:hover, .next:hover {
+     background: rgba(0,0,0,0.8); 
+ }
 
-/* --- GRILLA DE PRODUCTOS --- */
+/* --- Productos --- */
 .prod-item {
     display: flex;
     flex-direction: column;
@@ -113,7 +119,7 @@ hr.solid {
 }
 
 .prod-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px); /* Sube un poco al pasar el ratón */
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     border-color: #888;
 }
@@ -131,7 +137,7 @@ hr.solid {
     color: #333;
 }
 
-/* --- FORMULARIOS --- */
+/* --- Formularios --- */
 .estFormulario {
     max-width: 450px;
     margin: 40px auto;
@@ -142,12 +148,12 @@ hr.solid {
     flex-direction: column;
 }
 
-.form-control:focus {
+.form-control:focus { /* cajita del formulario */
     border-color: #86b7fe;
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-/* --- VISTA ACERCA DE --- */
+/* --- Acerca de --- */
 .seccion-acerca-de {
     background-color: #fff;
     padding: 40px;
